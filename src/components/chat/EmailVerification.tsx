@@ -81,8 +81,8 @@ export function EmailVerification({ onVerified }: Props) {
         <div className="w-8 h-8 rounded-full bg-[var(--color-primary)]/20 flex-shrink-0 flex items-center justify-center">
           <span className="material-icons-outlined text-[var(--color-primary)] text-sm">smart_toy</span>
         </div>
-        <div className="bg-white/5 border border-white/10 rounded-2xl rounded-tr-none p-4 max-w-[85%]">
-          <p className="text-gray-200 text-sm leading-relaxed mb-3">
+        <div className="bg-white border border-gray-100 rounded-2xl rounded-tr-none p-4 max-w-[85%] shadow-sm">
+          <p className="text-gray-700 text-sm leading-relaxed mb-3">
             מעולה! אספתי מספיק מידע כדי להתחיל לנסח את התביעה. כדי לשמור את התביעה שלך, צריך לאמת את כתובת האימייל שלך. 📧
           </p>
           <div className="flex gap-2">
@@ -92,7 +92,7 @@ export function EmailVerification({ onVerified }: Props) {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="email@example.com"
               dir="ltr"
-              className="flex-1 bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/50"
+              className="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[var(--color-gold)]/50"
               onKeyDown={(e) => e.key === "Enter" && handleSendCode()}
             />
             <button
@@ -103,7 +103,7 @@ export function EmailVerification({ onVerified }: Props) {
               {loading ? "..." : "שלח קוד"}
             </button>
           </div>
-          {error && <p className="text-red-400 text-xs mt-2">{error}</p>}
+          {error && <p className="text-red-500 text-xs mt-2">{error}</p>}
         </div>
       </div>
     );
@@ -115,9 +115,9 @@ export function EmailVerification({ onVerified }: Props) {
       <div className="w-8 h-8 rounded-full bg-[var(--color-primary)]/20 flex-shrink-0 flex items-center justify-center">
         <span className="material-icons-outlined text-[var(--color-primary)] text-sm">smart_toy</span>
       </div>
-      <div className="bg-white/5 border border-white/10 rounded-2xl rounded-tr-none p-4 max-w-[85%]">
-        <p className="text-gray-200 text-sm leading-relaxed mb-3">
-          שלחתי קוד אימות ל-<span className="text-[var(--color-gold)]" dir="ltr">{email}</span>. הזינו את הקוד בן 6 הספרות: ✉️
+      <div className="bg-white border border-gray-100 rounded-2xl rounded-tr-none p-4 max-w-[85%] shadow-sm">
+        <p className="text-gray-700 text-sm leading-relaxed mb-3">
+          שלחתי קוד אימות ל-<span className="text-[var(--color-navy-dark)] font-medium" dir="ltr">{email}</span>. הזינו את הקוד בן 6 הספרות: ✉️
         </p>
         <div className="flex gap-2">
           <input
@@ -127,7 +127,7 @@ export function EmailVerification({ onVerified }: Props) {
             placeholder="000000"
             dir="ltr"
             maxLength={6}
-            className="flex-1 bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/50 text-center tracking-[0.5em] font-mono"
+            className="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[var(--color-gold)]/50 text-center tracking-[0.5em] font-mono"
             onKeyDown={(e) => e.key === "Enter" && handleVerifyCode()}
             autoFocus
           />
@@ -139,10 +139,10 @@ export function EmailVerification({ onVerified }: Props) {
             {loading ? "..." : "אמת"}
           </button>
         </div>
-        {error && <p className="text-red-400 text-xs mt-2">{error}</p>}
+        {error && <p className="text-red-500 text-xs mt-2">{error}</p>}
         <button
           onClick={handleSendCode}
-          className="text-xs text-gray-500 hover:text-gray-300 mt-2 transition-colors"
+          className="text-xs text-gray-400 hover:text-gray-600 mt-2 transition-colors"
         >
           לא קיבלתי קוד - שלח שוב
         </button>
