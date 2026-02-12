@@ -155,7 +155,7 @@ export function ChatInterface({
   };
 
   return (
-    <div className="flex flex-col h-screen bg-[var(--color-navy-dark)]">
+    <div className="flex flex-col h-screen bg-[var(--color-navy-dark)] overflow-x-hidden">
       {/* Header */}
       <header className="flex-shrink-0 bg-[var(--color-navy-dark)]/80 backdrop-blur-md border-b border-white/5 px-4 py-3">
         <div className="max-w-3xl mx-auto flex items-center justify-between">
@@ -193,11 +193,11 @@ export function ChatInterface({
               <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-tr from-[var(--color-primary)] to-blue-400 flex items-center justify-center">
                 <span className="material-icons-outlined text-white text-4xl">smart_toy</span>
               </div>
-              <h2 className="text-xl font-bold text-white mb-2">שלום! אני היועץ המשפטי שלך</h2>
-              <p className="text-gray-400 mb-8 max-w-md mx-auto">
+              <h2 className="text-xl font-bold text-white mb-2 px-2">שלום! אני היועץ המשפטי שלך</h2>
+              <p className="text-gray-400 mb-8 max-w-md mx-auto px-4">
                 ספרו לי בקצרה מה קרה, ואני אעזור לכם להכין תביעה מקצועית. אין צורך להתחבר - נתחיל ישר.
               </p>
-              <div className="flex flex-wrap gap-3 justify-center">
+              <div className="flex flex-wrap gap-3 justify-center px-2">
                 {[
                   "הזמנתי מוצר שלא הגיע",
                   "קיבלתי הודעות ספאם",

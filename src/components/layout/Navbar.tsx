@@ -77,6 +77,7 @@ export function Navbar() {
             <Link href="/about" className="block px-3 py-2 text-base font-medium text-gray-600 hover:bg-gray-50 rounded-md" onClick={() => setMobileOpen(false)}>אודות</Link>
             <Link href="/faq" className="block px-3 py-2 text-base font-medium text-gray-600 hover:bg-gray-50 rounded-md" onClick={() => setMobileOpen(false)}>שאלות נפוצות</Link>
             <Link href="/contact" className="block px-3 py-2 text-base font-medium text-gray-600 hover:bg-gray-50 rounded-md" onClick={() => setMobileOpen(false)}>צור קשר</Link>
+            <Link href="/dashboard" className="block px-3 py-2 text-base font-medium text-gray-600 hover:bg-gray-50 rounded-md" onClick={() => setMobileOpen(false)}>התביעות שלי</Link>
             <div className="pt-2 border-t border-gray-100">
               <Link href="/chat" className="block w-full text-center bg-[var(--color-gold)] text-[var(--color-navy-dark)] font-bold py-3 rounded-xl" onClick={() => setMobileOpen(false)}>התחל תביעה</Link>
             </div>

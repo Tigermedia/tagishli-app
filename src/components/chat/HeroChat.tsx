@@ -99,7 +99,7 @@ export function HeroChat() {
   };
 
   return (
-    <div className="relative bg-white rounded-2xl shadow-[0_20px_80px_rgba(0,0,0,0.4)]">
+    <div className="relative bg-white rounded-2xl shadow-[0_20px_80px_rgba(0,0,0,0.4)] overflow-hidden">
       {/* Header */}
       <div className="px-6 py-4 bg-[var(--color-navy-dark)] rounded-t-2xl border-b border-gray-200 flex items-center justify-between">
         <div className="flex items-center gap-3">
