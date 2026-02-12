@@ -102,7 +102,7 @@ export function HeroChat() {
   return (
     <div className="relative bg-white rounded-2xl shadow-[0_20px_80px_rgba(0,0,0,0.4)] overflow-hidden">
       {/* Header */}
-      <div className="px-6 py-4 bg-[var(--color-navy-dark)] rounded-t-2xl border-b border-gray-200 flex items-center justify-between">
+      <div className="px-4 py-3 sm:px-6 sm:py-4 bg-[var(--color-navy-dark)] rounded-t-2xl border-b border-gray-200 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="relative">
             <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[var(--color-primary)] to-blue-400 flex items-center justify-center">
@@ -119,7 +119,7 @@ export function HeroChat() {
       </div>
 
       {/* Chat Body */}
-      <div ref={chatBodyRef} className="p-6 h-[420px] overflow-y-auto space-y-4 bg-gray-50 scrollbar-hide">
+      <div ref={chatBodyRef} className="p-4 sm:p-6 h-[50dvh] sm:h-[420px] overflow-y-auto space-y-4 bg-gray-50 scrollbar-hide">
         {/* Welcome state */}
         {!started && localMessages.length === 0 && (
           <div className="text-center py-8">

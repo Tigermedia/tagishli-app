@@ -36,6 +36,7 @@ export function ChatInterface({
   const [localMessages, setLocalMessages] = useState<LocalMessage[]>([]);
   const [userMessageCount, setUserMessageCount] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const chatBodyRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Only query Convex when authenticated and have a conversationId
@@ -53,7 +54,9 @@ export function ChatInterface({
     : localMessages;
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (chatBodyRef.current) {
+      chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
+    }
   }, [displayMessages, isTyping, showVerification]);
 
   const handleSend = async () => {
@@ -157,7 +160,7 @@ export function ChatInterface({
   };
 
   return (
-    <div className="flex flex-col h-screen bg-[var(--color-navy-dark)] overflow-x-hidden">
+    <div className="flex flex-col h-[100dvh] bg-[var(--color-navy-dark)] overflow-x-hidden">
       {/* Header */}
       <header className="flex-shrink-0 bg-[var(--color-navy-dark)]/80 backdrop-blur-md border-b border-white/5 px-4 py-3">
         <div className="max-w-3xl mx-auto flex items-center justify-between">
@@ -187,7 +190,7 @@ export function ChatInterface({
       </header>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto px-4 py-6 scrollbar-hide">
+      <div ref={chatBodyRef} className="flex-1 overflow-y-auto px-4 py-6 scrollbar-hide">
         <div className="max-w-3xl mx-auto space-y-4">
           {/* Welcome */}
           {displayMessages.length === 0 && !showVerification && (
