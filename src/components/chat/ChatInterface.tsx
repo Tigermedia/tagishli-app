@@ -172,7 +172,7 @@ export function ChatInterface({
               <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-[var(--color-navy-dark)] rounded-full" />
             </div>
             <div>
-              <h1 className="text-white font-medium text-sm">היועץ של תגיש לי</h1>
+              <h1 className="text-white font-medium text-sm">העוזר של תגיש לי</h1>
               <p className="text-gray-400 text-xs">מחובר כעת - מופעל ע&quot;י AI</p>
             </div>
           </div>
@@ -198,7 +198,7 @@ export function ChatInterface({
               <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-tr from-[var(--color-primary)] to-blue-400 flex items-center justify-center">
                 <span className="material-icons-outlined text-white text-4xl">smart_toy</span>
               </div>
-              <h2 className="text-xl font-bold text-white mb-2 px-2">שלום! אני היועץ המשפטי שלך</h2>
+              <h2 className="text-xl font-bold text-white mb-2 px-2">שלום! אני העוזר הדיגיטלי שלך</h2>
               <p className="text-gray-400 mb-8 max-w-md mx-auto px-4">
                 ספרו לי בקצרה מה קרה, ואני אעזור לכם להכין תביעה מקצועית. אין צורך להתחבר - נתחיל ישר.
               </p>

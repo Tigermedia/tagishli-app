@@ -45,11 +45,17 @@ export function Footer() {
             </div>
           </div>
         </div>
-        <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500">
-          <p>© 2026 תגיש לי בע&quot;מ. כל הזכויות שמורות.</p>
-          <p className="mt-2 md:mt-0 text-center md:text-right max-w-xl">
-            *השירות אינו מהווה ייעוץ משפטי ותחליף לייצוג ע&quot;י עורך דין בבית המשפט. המערכת מסייעת בניסוח והגשה טכנית בלבד.
+        <div className="border-t border-gray-800 pt-8 space-y-4">
+          <p className="text-xs text-gray-400 text-center leading-relaxed max-w-3xl mx-auto">
+            ⚖️ תגיש לי היא פלטפורמת מידע משפטי בלבד ואינה מהווה תחליף לייעוץ משפטי מקצועי. המידע המוצג באתר הוא כללי ואינו מותאם למקרה הספציפי שלך. כל תביעה נבדקת ומאושרת על ידי עורך דין מוסמך לפני הגשה. לפני קבלת החלטות משפטיות, מומלץ להתייעץ עם עורך דין.
           </p>
+          <div className="flex flex-col md:flex-row justify-between items-center text-xs text-gray-500">
+            <p>© 2026 תגיש לי. כל הזכויות שמורות.</p>
+            <div className="mt-2 md:mt-0 flex gap-4">
+              <Link href="/terms" className="hover:text-[var(--color-gold)] transition-colors">תנאי שימוש</Link>
+              <Link href="/privacy" className="hover:text-[var(--color-gold)] transition-colors">מדיניות פרטיות</Link>
+            </div>
+          </div>
         </div>
       </div>
     </footer>

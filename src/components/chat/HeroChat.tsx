@@ -111,7 +111,7 @@ export function HeroChat() {
             <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-[var(--color-navy-dark)] rounded-full" />
           </div>
           <div>
-            <h3 className="text-white font-medium text-sm">היועץ של תגיש לי</h3>
+            <h3 className="text-white font-medium text-sm">העוזר של תגיש לי</h3>
             <p className="text-gray-400 text-xs">מחובר כעת - מופעל ע&quot;י AI</p>
           </div>
         </div>
@@ -123,7 +123,8 @@ export function HeroChat() {
         {/* Welcome state */}
         {!started && localMessages.length === 0 && (
           <div className="text-center py-8">
-            <p className="text-gray-500 text-sm mb-4">ספרו לי בקצרה מה קרה, או בחרו נושא:</p>
+            <p className="text-gray-500 text-sm mb-1">ספרו לי בקצרה מה קרה, או בחרו נושא:</p>
+            <p className="text-gray-400 text-[10px] mb-4">⚠️ מידע כללי בלבד - אינו מהווה ייעוץ משפטי. כל תביעה נבדקת ע&quot;י עו&quot;ד מוסמך.</p>
             <div className="flex flex-wrap gap-2 justify-center">
               {[
                 "הזמנתי מוצר שלא הגיע",

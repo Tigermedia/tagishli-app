@@ -29,15 +29,15 @@ export default function Home() {
             <div className="lg:col-span-5 text-center lg:text-right mb-12 lg:mb-0">
               <div className="inline-flex items-center px-3 py-1 rounded-full border border-[var(--color-gold)]/30 bg-[var(--color-gold)]/10 text-[var(--color-gold)] text-sm font-medium mb-6">
                 <span className="ml-2 w-2 h-2 rounded-full bg-[var(--color-gold)] animate-pulse-gold" />
-                חדש: ניסוח תביעה באמצעות AI
+                חדש: עזרה בהכנת תביעה קטנה בליווי AI
               </div>
               <h1 className="text-4xl md:text-6xl font-extrabold text-white tracking-tight leading-tight mb-6">
                 התביעה שלך <br />
                 <span className="text-gradient-gold">מתחילה כאן.</span>
               </h1>
               <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-                פלטפורמה משפטית חכמה לניהול תביעות קטנות. ללא צורך בידע משפטי
-                מוקדם, בליווי בינה מלאכותית ובדיקת מומחים. מהיר, פשוט והוגן.
+                פלטפורמה לסיוע בהגשת תביעות קטנות. ללא צורך בידע משפטי
+                מוקדם, בליווי טכנולוגיה חכמה ובדיקת עורך דין מוסמך. מהיר, פשוט והוגן.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <Link

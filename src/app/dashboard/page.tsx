@@ -29,7 +29,7 @@ export default function DashboardPage() {
         <main className="max-w-4xl mx-auto px-4 py-20 text-center">
           <div className="text-5xl mb-4">🔒</div>
           <h2 className="text-xl font-semibold mb-2">צריך להתחבר</h2>
-          <p className="text-gray-500 mb-6">התחילו שיחה עם היועץ המשפטי כדי להתחבר</p>
+          <p className="text-gray-500 mb-6">התחילו שיחה עם העוזר הדיגיטלי כדי להתחבר</p>
           <Link
             href="/chat"
             className="inline-flex items-center gap-2 px-6 py-3 text-white bg-[var(--color-navy-dark)] rounded-xl hover:bg-[var(--color-primary)] transition"

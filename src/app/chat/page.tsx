@@ -39,7 +39,7 @@ export default function ChatPage() {
       <div className="min-h-screen flex items-center justify-center bg-[var(--color-navy-dark)]">
         <div className="text-center">
           <div className="w-8 h-8 border-4 border-[var(--color-gold)] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-gray-400">מכין את היועץ המשפטי...</p>
+          <p className="text-gray-400">מכין את העוזר הדיגיטלי...</p>
         </div>
       </div>
     );
