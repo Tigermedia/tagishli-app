@@ -1,56 +1,11 @@
 import Link from "next/link";
-import { SignedIn, SignedOut } from "@clerk/nextjs";
+import { Navbar } from "@/components/layout/Navbar";
+import { Footer } from "@/components/layout/Footer";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-[var(--color-bg-light)] text-[var(--color-text)] overflow-x-hidden">
-      {/* Navigation */}
-      <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20">
-            <div className="flex-shrink-0 flex items-center gap-2">
-              <div className="w-8 h-8 bg-[var(--color-navy-dark)] text-white rounded-lg flex items-center justify-center font-bold text-xl">
-                ת
-              </div>
-              <span className="font-bold text-2xl tracking-tight text-[var(--color-navy-dark)]">
-                תגיש לי
-              </span>
-            </div>
-            <div className="hidden md:flex items-baseline gap-1">
-              <a href="#how-it-works" className="text-gray-600 hover:text-[var(--color-primary)] px-3 py-2 rounded-md text-base font-medium transition-colors">
-                איך זה עובד
-              </a>
-              <a href="#features" className="text-gray-600 hover:text-[var(--color-primary)] px-3 py-2 rounded-md text-base font-medium transition-colors">
-                יתרונות
-              </a>
-              <a href="#pricing" className="text-gray-600 hover:text-[var(--color-primary)] px-3 py-2 rounded-md text-base font-medium transition-colors">
-                מחיר
-              </a>
-              <a href="#contact" className="text-gray-600 hover:text-[var(--color-primary)] px-3 py-2 rounded-md text-base font-medium transition-colors">
-                צור קשר
-              </a>
-            </div>
-            <div className="hidden md:block">
-              <SignedOut>
-                <Link
-                  href="/sign-in"
-                  className="bg-[var(--color-navy-dark)] text-white hover:bg-[var(--color-primary)] px-5 py-2.5 rounded-lg font-medium transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-                >
-                  אזור אישי
-                </Link>
-              </SignedOut>
-              <SignedIn>
-                <Link
-                  href="/dashboard"
-                  className="bg-[var(--color-navy-dark)] text-white hover:bg-[var(--color-primary)] px-5 py-2.5 rounded-lg font-medium transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-                >
-                  אזור אישי
-                </Link>
-              </SignedIn>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* Hero Section */}
       <div className="relative bg-[var(--color-navy-dark)] overflow-hidden">
@@ -402,60 +357,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-[var(--color-navy-dark)] text-white border-t border-gray-800 pt-16 pb-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 bg-white text-[var(--color-navy-dark)] rounded-lg flex items-center justify-center font-bold text-xl">
-                  ת
-                </div>
-                <span className="font-bold text-2xl tracking-tight">תגיש לי</span>
-              </div>
-              <p className="text-gray-400 text-sm leading-relaxed mb-6">
-                פלטפורמת הליגל-טק המובילה בישראל להגשת תביעות קטנות. מנגישים את הצדק לכולם באמצעות טכנולוגיה.
-              </p>
-            </div>
-            <div>
-              <h4 className="font-bold text-lg mb-4 text-[var(--color-gold)]">שירותים</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">תביעות צרכנות</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">תביעות ספאם</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">נזקי רכוש</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">הלנת שכר</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-bold text-lg mb-4 text-[var(--color-gold)]">חברה</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">אודות</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">קריירה</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">בלוג משפטי</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">צור קשר</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-bold text-lg mb-4 text-[var(--color-gold)]">משפטי</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">תנאי שימוש</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">מדיניות פרטיות</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">הצהרת נגישות</a></li>
-              </ul>
-              <div className="mt-6 flex items-center gap-2 text-xs text-gray-500 border border-gray-700 rounded-lg p-2">
-                <span className="material-icons-outlined">lock</span>
-                <span>מאובטח בסטנדרט SSL מחמיר</span>
-              </div>
-            </div>
-          </div>
-          <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500">
-            <p>© 2026 תגיש לי בע&quot;מ. כל הזכויות שמורות.</p>
-            <p className="mt-2 md:mt-0 text-center md:text-right max-w-xl">
-              *השירות אינו מהווה ייעוץ משפטי ותחליף לייצוג ע&quot;י עורך דין בבית המשפט. המערכת מסייעת בניסוח והגשה טכנית בלבד.
-            </p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
 
       {/* Floating Chat Button */}
       <Link
