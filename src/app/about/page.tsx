@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Navbar } from "@/components/layout/Navbar";
+
+export const metadata: Metadata = {
+  title: "אודות - תגיש לי | פלטפורמה לתביעות קטנות",
+  description: "תגיש לי - פלטפורמה ישראלית לסיוע בהגשת תביעות קטנות בליווי AI ובדיקת עורך דין. הכירו את הצוות והחזון שלנו.",
+};
 import { Footer } from "@/components/layout/Footer";
 
 export default function AboutPage() {

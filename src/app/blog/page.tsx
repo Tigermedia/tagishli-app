@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Navbar } from "@/components/layout/Navbar";
+
+export const metadata: Metadata = {
+  title: "בלוג משפטי - תגיש לי | מידע על תביעות קטנות",
+  description: "מאמרים ומדריכים על תביעות קטנות בישראל. זכויות צרכנים, חוק הספאם, פיקדון שכירות, ביטוח ועוד.",
+};
 import { Footer } from "@/components/layout/Footer";
 
 const posts = [
@@ -64,20 +70,22 @@ export default function BlogPage() {
       <section className="py-16">
         <div className="max-w-5xl mx-auto px-4">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {posts.map((post) => (
-              <article key={post.title} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow group cursor-pointer">
-                <div className="h-40 bg-gradient-to-bl from-[var(--color-navy-dark)] to-[var(--color-navy-light)] flex items-center justify-center">
-                  <span className="material-icons-outlined text-white/30 text-6xl group-hover:text-white/50 transition-colors">{post.icon}</span>
-                </div>
-                <div className="p-6">
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="px-2 py-0.5 bg-[var(--color-primary)]/10 text-[var(--color-primary)] rounded-full text-xs font-medium">{post.category}</span>
-                    <span className="text-xs text-gray-400">{post.date}</span>
+            {posts.map((post, idx) => (
+              <Link key={post.title} href={`/blog#post-${idx}`}>
+                <article className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow group cursor-pointer h-full">
+                  <div className="h-40 bg-gradient-to-bl from-[var(--color-navy-dark)] to-[var(--color-navy-light)] flex items-center justify-center">
+                    <span className="material-icons-outlined text-white/30 text-6xl group-hover:text-white/50 transition-colors">{post.icon}</span>
                   </div>
-                  <h2 className="font-bold text-[var(--color-navy-dark)] mb-2 group-hover:text-[var(--color-primary)] transition-colors">{post.title}</h2>
-                  <p className="text-sm text-gray-500 leading-relaxed">{post.excerpt}</p>
-                </div>
-              </article>
+                  <div className="p-6">
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="px-2 py-0.5 bg-[var(--color-primary)]/10 text-[var(--color-primary)] rounded-full text-xs font-medium">{post.category}</span>
+                      <span className="text-xs text-gray-400">{post.date}</span>
+                    </div>
+                    <h2 className="font-bold text-[var(--color-navy-dark)] mb-2 group-hover:text-[var(--color-primary)] transition-colors">{post.title}</h2>
+                    <p className="text-sm text-gray-500 leading-relaxed">{post.excerpt}</p>
+                  </div>
+                </article>
+              </Link>
             ))}
           </div>
         </div>

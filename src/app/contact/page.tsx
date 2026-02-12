@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Navbar } from "@/components/layout/Navbar";
+
+export const metadata: Metadata = {
+  title: "צור קשר - תגיש לי",
+  description: "צרו איתנו קשר לשאלות על תביעות קטנות, השירות שלנו, או כל נושא אחר.",
+};
 import { Footer } from "@/components/layout/Footer";
 
 export default function ContactPage() {
@@ -24,9 +30,9 @@ export default function ContactPage() {
               <h2 className="text-2xl font-bold text-[var(--color-navy-dark)] mb-8">דרכי התקשרות</h2>
               <div className="space-y-6">
                 {[
-                  { icon: "chat", title: "וואטסאפ", desc: "הדרך המהירה ביותר ליצור קשר", value: "052-XXX-XXXX", action: "שלח הודעה" },
+                  { icon: "chat", title: "וואטסאפ", desc: "הדרך המהירה ביותר ליצור קשר", value: "דברו איתנו בוואטסאפ", action: "שלח הודעה" },
                   { icon: "email", title: "אימייל", desc: "לפניות כלליות ושאלות", value: "info@tagishli.co.il", action: "שלח אימייל" },
-                  { icon: "phone", title: "טלפון", desc: "ימים א'-ה' 09:00-18:00", value: "03-XXX-XXXX", action: "התקשר" },
+                  { icon: "phone", title: "טלפון", desc: "ימים א'-ה' 09:00-18:00", value: "צרו קשר בטופס", action: "התקשר" },
                 ].map((item) => (
                   <div key={item.title} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex gap-4">
                     <div className="flex-shrink-0 w-12 h-12 bg-[var(--color-gold)]/10 rounded-lg flex items-center justify-center">
@@ -57,20 +63,20 @@ export default function ContactPage() {
               <h2 className="text-2xl font-bold text-[var(--color-navy-dark)] mb-8">שלחו הודעה</h2>
               <form className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 space-y-5">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">שם מלא</label>
-                  <input type="text" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/20 outline-none transition" placeholder="הזינו שם מלא" />
+                  <label htmlFor="contact-name" className="block text-sm font-medium text-gray-700 mb-1">שם מלא</label>
+                  <input id="contact-name" type="text" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/20 outline-none transition" placeholder="הזינו שם מלא" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">טלפון</label>
-                  <input type="tel" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/20 outline-none transition" placeholder="05X-XXX-XXXX" dir="ltr" />
+                  <label htmlFor="contact-phone" className="block text-sm font-medium text-gray-700 mb-1">טלפון</label>
+                  <input id="contact-phone" type="tel" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/20 outline-none transition" placeholder="05X-XXX-XXXX" dir="ltr" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">אימייל</label>
-                  <input type="email" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/20 outline-none transition" placeholder="email@example.com" dir="ltr" />
+                  <label htmlFor="contact-email" className="block text-sm font-medium text-gray-700 mb-1">אימייל</label>
+                  <input id="contact-email" type="email" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/20 outline-none transition" placeholder="email@example.com" dir="ltr" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">נושא</label>
-                  <select className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/20 outline-none transition bg-white">
+                  <label htmlFor="contact-subject" className="block text-sm font-medium text-gray-700 mb-1">נושא</label>
+                  <select id="contact-subject" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/20 outline-none transition bg-white">
                     <option>שאלה כללית</option>
                     <option>בעיה טכנית</option>
                     <option>שאלה על תהליך ההגשה</option>
@@ -80,8 +86,8 @@ export default function ContactPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">הודעה</label>
-                  <textarea rows={4} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/20 outline-none transition resize-none" placeholder="כתבו את ההודעה שלכם..." />
+                  <label htmlFor="contact-message" className="block text-sm font-medium text-gray-700 mb-1">הודעה</label>
+                  <textarea id="contact-message" rows={4} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/20 outline-none transition resize-none" placeholder="כתבו את ההודעה שלכם..." />
                 </div>
                 <button type="submit" className="w-full bg-[var(--color-navy-dark)] text-white font-bold py-4 rounded-xl hover:bg-[var(--color-primary)] transition-colors">
                   שלח הודעה

@@ -63,6 +63,8 @@ export function Navbar() {
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             className="md:hidden p-2 rounded-md text-gray-600 hover:bg-gray-100"
+            aria-label={mobileOpen ? "סגור תפריט" : "פתח תפריט"}
+            aria-expanded={mobileOpen}
           >
             <span className="material-icons-outlined">{mobileOpen ? "close" : "menu"}</span>
           </button>

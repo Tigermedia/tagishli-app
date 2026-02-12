@@ -282,6 +282,7 @@ export default function Home() {
       <Link
         href="/chat"
         className="fixed bottom-6 left-6 z-40 flex items-center gap-3 bg-[var(--color-primary)] hover:bg-blue-700 text-white rounded-full p-4 shadow-2xl transition-all hover:scale-105 group"
+        aria-label="התחל צ'אט עם העוזר המשפטי"
       >
         <span className="font-bold hidden group-hover:block transition-all pl-2">התחל צ&apos;אט</span>
         <span className="material-icons-outlined">chat</span>

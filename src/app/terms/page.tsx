@@ -1,4 +1,10 @@
+import type { Metadata } from "next";
 import { Navbar } from "@/components/layout/Navbar";
+
+export const metadata: Metadata = {
+  title: "תנאי שימוש - תגיש לי",
+  description: "תנאי השימוש של פלטפורמת תגיש לי לסיוע בהגשת תביעות קטנות.",
+};
 import { Footer } from "@/components/layout/Footer";
 
 export default function TermsPage() {
@@ -31,7 +37,7 @@ export default function TermsPage() {
           <h2 className="text-xl font-semibold text-[var(--color-navy-dark)] mt-8">3. זכאות לשימוש</h2>
           <p>
             השירות מיועד לאנשים פרטיים בלבד (לא לתאגידים או חברות) המעוניינים להגיש תביעה קטנה
-            בבית המשפט בישראל, עד לתקרה הקבועה בחוק (39,900 ₪ נכון ל-2025/2026).
+            בבית המשפט בישראל, עד לתקרה הקבועה בחוק (38,900 ₪ נכון ל-2026).
           </p>
 
           <h2 className="text-xl font-semibold text-[var(--color-navy-dark)] mt-8">4. אחריות המשתמש</h2>

@@ -35,9 +35,9 @@ export function Footer() {
           <div>
             <h4 className="font-bold text-lg mb-4 text-[var(--color-gold)]">משפטי</h4>
             <ul className="space-y-2 text-sm text-gray-400">
-              <li><a href="#" className="hover:text-white transition-colors">תנאי שימוש</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">מדיניות פרטיות</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">הצהרת נגישות</a></li>
+              <li><Link href="/terms" className="hover:text-white transition-colors">תנאי שימוש</Link></li>
+              <li><Link href="/privacy" className="hover:text-white transition-colors">מדיניות פרטיות</Link></li>
+              <li><Link href="/contact" className="hover:text-white transition-colors">הצהרת נגישות</Link></li>
             </ul>
             <div className="mt-6 flex items-center gap-2 text-xs text-gray-500 border border-gray-700 rounded-lg p-2">
               <span className="material-icons-outlined">lock</span>

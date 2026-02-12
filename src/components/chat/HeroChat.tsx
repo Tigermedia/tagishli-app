@@ -125,7 +125,7 @@ export function HeroChat() {
           <div className="text-center py-8">
             <p className="text-gray-500 text-sm mb-1">ספרו לי בקצרה מה קרה, או בחרו נושא:</p>
             <p className="text-gray-400 text-[10px] mb-4">⚠️ מידע כללי בלבד - אינו מהווה ייעוץ משפטי. כל תביעה נבדקת ע&quot;י עו&quot;ד מוסמך.</p>
-            <div className="flex flex-wrap gap-2 justify-center">
+            <div className="flex flex-wrap gap-2 justify-center max-h-[200px] overflow-y-auto scrollbar-hide px-2">
               {[
                 "הזמנתי מוצר שלא הגיע",
                 "חברת תעופה ביטלה/עיכבה טיסה",
@@ -164,8 +164,8 @@ export function HeroChat() {
             </div>
             <div className={`max-w-[85%] p-4 ${
               msg.role === "user"
-                ? "bg-[var(--color-navy-dark)] text-white rounded-2xl rounded-tl-none shadow-md"
-                : "bg-white border border-gray-100 text-gray-800 rounded-2xl rounded-tr-none shadow-sm"
+                ? "bg-[var(--color-navy-dark)] text-white rounded-2xl rounded-tr-none shadow-md"
+                : "bg-white border border-gray-100 text-gray-800 rounded-2xl rounded-tl-none shadow-sm"
             }`}>
               <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.content}</p>
             </div>
@@ -215,7 +215,7 @@ export function HeroChat() {
             <div className="w-8 h-8 rounded-full bg-[var(--color-primary)]/20 flex-shrink-0 flex items-center justify-center">
               <span className="material-icons-outlined text-[var(--color-primary)] text-sm">smart_toy</span>
             </div>
-            <div className="bg-white border border-gray-100 rounded-2xl rounded-tr-none px-4 py-3 shadow-sm">
+            <div className="bg-white border border-gray-100 rounded-2xl rounded-tl-none px-4 py-3 shadow-sm">
               <div className="flex items-center gap-2">
                 <span className="text-xs text-gray-400">מנסח תגובה</span>
                 <div className="flex gap-1">

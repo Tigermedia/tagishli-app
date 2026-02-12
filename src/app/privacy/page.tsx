@@ -1,4 +1,10 @@
+import type { Metadata } from "next";
 import { Navbar } from "@/components/layout/Navbar";
+
+export const metadata: Metadata = {
+  title: "מדיניות פרטיות - תגיש לי",
+  description: "מדיניות הפרטיות של תגיש לי - איך אנחנו אוספים, משתמשים ומגנים על המידע שלך.",
+};
 import { Footer } from "@/components/layout/Footer";
 
 export default function PrivacyPage() {
