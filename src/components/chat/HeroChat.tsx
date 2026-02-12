@@ -122,12 +122,18 @@ export function HeroChat() {
         {/* Welcome state */}
         {!started && localMessages.length === 0 && (
           <div className="text-center py-8">
-            <p className="text-gray-500 text-sm mb-6">ספרו לי בקצרה מה קרה, או בחרו נושא:</p>
+            <p className="text-gray-500 text-sm mb-4">ספרו לי בקצרה מה קרה, או בחרו נושא:</p>
             <div className="flex flex-wrap gap-2 justify-center">
               {[
                 "הזמנתי מוצר שלא הגיע",
-                "קיבלתי הודעות ספאם",
+                "חברת תעופה ביטלה/עיכבה טיסה",
                 "המוסך לא תיקן כמו שצריך",
+                "בעל הבית לא מחזיר פיקדון",
+                "חויבתי על שירות שלא קיבלתי",
+                "קבלן שיפוצים לא סיים עבודה",
+                "ביטוח מסרב לשלם תביעה",
+                "קיבלתי הודעות ספאם",
+                "שכן גורם למטרדים",
                 "קיבלתי תביעה נגדי",
               ].map((suggestion) => (
                 <button
