@@ -12,7 +12,15 @@ export default defineSchema({
     createdAt: v.number(),
   })
     .index("by_clerk_id", ["clerkId"])
-    .index("by_phone", ["phone"]),
+    .index("by_phone", ["phone"])
+    .index("by_email", ["email"]),
+
+  otpCodes: defineTable({
+    email: v.string(),
+    code: v.string(),
+    expiresAt: v.number(),
+    verified: v.boolean(),
+  }).index("by_email", ["email"]),
 
   conversations: defineTable({
     userId: v.id("users"),

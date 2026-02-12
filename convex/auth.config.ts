@@ -1,10 +1,6 @@
+// Auth handled via custom email OTP - no external auth provider needed
 const authConfig = {
-  providers: [
-    {
-      domain: process.env.CLERK_JWT_ISSUER_DOMAIN,
-      applicationID: "convex",
-    },
-  ],
+  providers: [],
 };
 
 export default authConfig;

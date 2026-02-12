@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
-import { ClerkProvider } from "@clerk/nextjs";
 import { ConvexClientProvider } from "@/components/providers/ConvexClientProvider";
-import { hebrewClerkLocalization } from "@/lib/clerk-localization";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -30,9 +28,7 @@ export default function RootLayout({
         />
       </head>
       <body className="antialiased">
-        <ClerkProvider localization={hebrewClerkLocalization}>
-          <ConvexClientProvider>{children}</ConvexClientProvider>
-        </ClerkProvider>
+        <ConvexClientProvider>{children}</ConvexClientProvider>
       </body>
     </html>
   );

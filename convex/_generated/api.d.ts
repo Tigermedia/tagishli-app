@@ -12,6 +12,7 @@ import type * as ai from "../ai.js";
 import type * as claims from "../claims.js";
 import type * as conversations from "../conversations.js";
 import type * as messages from "../messages.js";
+import type * as otp from "../otp.js";
 import type * as users from "../users.js";
 
 import type {
@@ -25,6 +26,7 @@ declare const fullApi: ApiFromModules<{
   claims: typeof claims;
   conversations: typeof conversations;
   messages: typeof messages;
+  otp: typeof otp;
   users: typeof users;
 }>;
 

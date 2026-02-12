@@ -6,7 +6,7 @@ import { api } from "../../../convex/_generated/api";
 import type { Id } from "../../../convex/_generated/dataModel";
 import { ChatMessage } from "./ChatMessage";
 import { TypingIndicator } from "./TypingIndicator";
-import { PhoneVerification } from "./PhoneVerification";
+import { EmailVerification } from "./EmailVerification";
 
 interface LocalMessage {
   id: string;
@@ -188,17 +188,11 @@ export function ChatInterface({
             <ChatMessage key={msg.id} role={msg.role} content={msg.content} />
           ))}
 
-          {/* Inline Phone Verification */}
+          {/* Inline Email Verification */}
           {showVerification && !isAuthenticated && (
-            <PhoneVerification
-              onVerified={onAuthenticated}
-              onPhoneCollected={(phone) => {
-                const msg: LocalMessage = {
-                  id: `user-phone-${Date.now()}`,
-                  role: "user",
-                  content: phone,
-                };
-                setLocalMessages((prev) => [...prev, msg]);
+            <EmailVerification
+              onVerified={(verifiedUserId) => {
+                onAuthenticated();
               }}
             />
           )}

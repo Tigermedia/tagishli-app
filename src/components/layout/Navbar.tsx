@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+// Auth state managed via localStorage after email OTP verification
 
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -45,35 +45,18 @@ export function Navbar() {
 
           {/* CTA / User */}
           <div className="hidden md:flex items-center gap-3">
-            <SignedOut>
-              <Link
-                href="/sign-in"
-                className="text-gray-600 hover:text-[var(--color-primary)] px-3 py-2 text-sm font-medium transition-colors"
-              >
-                התחברות
-              </Link>
-              <Link
-                href="/chat"
-                className="bg-[var(--color-navy-dark)] text-white hover:bg-[var(--color-primary)] px-5 py-2.5 rounded-lg font-medium transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-              >
-                התחל תביעה
-              </Link>
-            </SignedOut>
-            <SignedIn>
-              <Link
-                href="/dashboard"
-                className="text-gray-600 hover:text-[var(--color-primary)] px-3 py-2 text-sm font-medium transition-colors"
-              >
-                התביעות שלי
-              </Link>
-              <Link
-                href="/chat"
-                className="bg-[var(--color-navy-dark)] text-white hover:bg-[var(--color-primary)] px-5 py-2.5 rounded-lg font-medium transition-all shadow-lg"
-              >
-                תביעה חדשה
-              </Link>
-              <UserButton />
-            </SignedIn>
+            <Link
+              href="/dashboard"
+              className="text-gray-600 hover:text-[var(--color-primary)] px-3 py-2 text-sm font-medium transition-colors"
+            >
+              התביעות שלי
+            </Link>
+            <Link
+              href="/chat"
+              className="bg-[var(--color-navy-dark)] text-white hover:bg-[var(--color-primary)] px-5 py-2.5 rounded-lg font-medium transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+            >
+              התחל תביעה
+            </Link>
           </div>
 
           {/* Mobile menu button */}
