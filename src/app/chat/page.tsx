@@ -51,8 +51,16 @@ export default function ChatPage() {
       userId={userId}
       isAuthenticated={isAuthenticated}
       onAuthenticated={() => {
-        // Reload to pick up the new auth state from localStorage
-        window.location.reload();
+        // Auth state already saved in localStorage by EmailVerification
+        // No reload needed - messages are preserved
+        const stored = localStorage.getItem("tagishli_user");
+        if (stored) {
+          try {
+            const { userId: storedUserId } = JSON.parse(stored);
+            setUserId(storedUserId as Id<"users">);
+            setIsAuthenticated(true);
+          } catch { /* ignore */ }
+        }
       }}
     />
   );

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { useQuery, useAction } from "convex/react";
+import { useQuery, useAction, useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import type { Id } from "../../../convex/_generated/dataModel";
 import { ChatMessage } from "./ChatMessage";
@@ -44,6 +44,8 @@ export function ChatInterface({
     conversationId ? { conversationId } : "skip"
   );
   const chat = conversationId ? useAction(api.ai.chat) : null;
+  const saveBatchMut = useMutation(api.messages.saveBatch);
+  const createConvMut = useMutation(api.conversations.create);
 
   const messages = conversationId ? dbMessages : undefined;
   const displayMessages = isAuthenticated && messages
@@ -229,7 +231,31 @@ export function ChatInterface({
           {/* Inline Email Verification */}
           {showVerification && !isAuthenticated && (
             <EmailVerification
-              onVerified={(verifiedUserId) => {
+              onVerified={async (verifiedUserId) => {
+                // Create conversation and save pre-auth messages - no reload!
+                try {
+                  const convId = await createConvMut({ userId: verifiedUserId });
+                  if (localMessages.length > 0) {
+                    await saveBatchMut({
+                      conversationId: convId,
+                      messages: localMessages.map((m) => ({
+                        role: m.role,
+                        content: m.content,
+                      })),
+                    });
+                  }
+                  setLocalMessages((prev) => [
+                    ...prev,
+                    {
+                      id: `ai-verified-${Date.now()}`,
+                      role: "assistant",
+                      content: "מעולה! האימות הצליח ✅ כל ההודעות נשמרו. בואו נמשיך - אני עכשיו מחובר למערכת המשפטית המלאה.",
+                    },
+                  ]);
+                } catch (err) {
+                  console.error("Post-auth error:", err);
+                }
+                setShowVerification(false);
                 onAuthenticated();
               }}
             />

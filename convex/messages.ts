@@ -19,6 +19,29 @@ export const send = mutation({
   },
 });
 
+// Save a batch of pre-auth messages to a conversation
+export const saveBatch = mutation({
+  args: {
+    conversationId: v.id("conversations"),
+    messages: v.array(
+      v.object({
+        role: v.string(),
+        content: v.string(),
+      })
+    ),
+  },
+  handler: async (ctx, args) => {
+    for (const msg of args.messages) {
+      await ctx.db.insert("messages", {
+        conversationId: args.conversationId,
+        role: msg.role,
+        content: msg.content,
+        createdAt: Date.now(),
+      });
+    }
+  },
+});
+
 export const getByConversation = query({
   args: { conversationId: v.id("conversations") },
   handler: async (ctx, args) => {

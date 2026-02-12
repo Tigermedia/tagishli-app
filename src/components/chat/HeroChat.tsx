@@ -29,6 +29,7 @@ export function HeroChat() {
 
   const chat = useAction(api.ai.chat);
   const createConversation = useMutation(api.conversations.create);
+  const saveBatch = useMutation(api.messages.saveBatch);
 
   useEffect(() => {
     // Scroll only within the chat container, not the page
@@ -173,9 +174,36 @@ export function HeroChat() {
         {/* Email verification */}
         {showVerification && !isAuthenticated && (
           <EmailVerification
-            onVerified={() => {
+            onVerified={async (verifiedUserId) => {
               setIsAuthenticated(true);
-              window.location.reload();
+              setShowVerification(false);
+              // Create conversation and save all pre-auth messages
+              try {
+                const convId = await createConversation({ userId: verifiedUserId });
+                setConversationId(convId);
+                // Save existing local messages to Convex
+                if (localMessages.length > 0) {
+                  await saveBatch({
+                    conversationId: convId,
+                    messages: localMessages.map((m) => ({
+                      role: m.role,
+                      content: m.content,
+                    })),
+                  });
+                }
+                // Add confirmation message
+                setLocalMessages((prev) => [
+                  ...prev,
+                  {
+                    id: `ai-verified-${Date.now()}`,
+                    role: "assistant",
+                    content: "מעולה! האימות הצליח ✅ כל ההודעות נשמרו. בואו נמשיך - אני עכשיו מחובר למערכת המשפטית המלאה.",
+                  },
+                ]);
+              } catch (err) {
+                console.error("Post-auth setup error:", err);
+              }
+              inputRef.current?.focus();
             }}
           />
         )}
