@@ -1,174 +1,470 @@
 import Link from "next/link";
 import { SignedIn, SignedOut } from "@clerk/nextjs";
 
-const claimTypes = [
-  {
-    icon: "📱",
-    title: "תביעת ספאם",
-    description: "קיבלתם הודעות פרסום לא רצויות? הגישו תביעה בקלות",
-  },
-  {
-    icon: "⚖️",
-    title: "תביעה קטנה",
-    description: "חוב, שירות לקוי, או נזק - נכין את התביעה ביחד",
-  },
-  {
-    icon: "🚗",
-    title: "רכב וביטוח",
-    description: "בעיות עם מוסך או חברת ביטוח? אנחנו כאן",
-  },
-  {
-    icon: "🛡️",
-    title: "כתב הגנה",
-    description: "קיבלתם תביעה? נעזור לכם להכין כתב הגנה",
-  },
-];
-
 export default function Home() {
   return (
-    <div className="min-h-screen bg-[var(--color-bg)]">
-      {/* Header */}
-      <header className="border-b border-[var(--color-border)] bg-[var(--color-surface)]">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-[var(--color-primary)]">
-            ⚖️ תגישלי
-          </h1>
-          <div className="flex gap-3">
-            <SignedOut>
-              <Link
-                href="/sign-in"
-                className="px-4 py-2 text-sm font-medium text-[var(--color-primary)] hover:bg-gray-100 rounded-lg transition"
-              >
-                התחברות
-              </Link>
-              <Link
-                href="/sign-up"
-                className="px-4 py-2 text-sm font-medium text-white bg-[var(--color-primary-light)] hover:bg-blue-600 rounded-lg transition"
-              >
-                הרשמה
-              </Link>
-            </SignedOut>
-            <SignedIn>
-              <Link
-                href="/chat"
-                className="px-4 py-2 text-sm font-medium text-white bg-[var(--color-primary-light)] hover:bg-blue-600 rounded-lg transition"
-              >
-                התחילו שיחה
-              </Link>
-              <Link
-                href="/dashboard"
-                className="px-4 py-2 text-sm font-medium text-[var(--color-primary)] hover:bg-gray-100 rounded-lg transition"
-              >
-                התביעות שלי
-              </Link>
-            </SignedIn>
+    <div className="min-h-screen bg-[var(--color-bg-light)] text-[var(--color-text)] overflow-x-hidden">
+      {/* Navigation */}
+      <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-20">
+            <div className="flex-shrink-0 flex items-center gap-2">
+              <div className="w-8 h-8 bg-[var(--color-navy-dark)] text-white rounded-lg flex items-center justify-center font-bold text-xl">
+                ת
+              </div>
+              <span className="font-bold text-2xl tracking-tight text-[var(--color-navy-dark)]">
+                תגיש לי
+              </span>
+            </div>
+            <div className="hidden md:flex items-baseline gap-1">
+              <a href="#how-it-works" className="text-gray-600 hover:text-[var(--color-primary)] px-3 py-2 rounded-md text-base font-medium transition-colors">
+                איך זה עובד
+              </a>
+              <a href="#features" className="text-gray-600 hover:text-[var(--color-primary)] px-3 py-2 rounded-md text-base font-medium transition-colors">
+                יתרונות
+              </a>
+              <a href="#pricing" className="text-gray-600 hover:text-[var(--color-primary)] px-3 py-2 rounded-md text-base font-medium transition-colors">
+                מחיר
+              </a>
+              <a href="#contact" className="text-gray-600 hover:text-[var(--color-primary)] px-3 py-2 rounded-md text-base font-medium transition-colors">
+                צור קשר
+              </a>
+            </div>
+            <div className="hidden md:block">
+              <SignedOut>
+                <Link
+                  href="/sign-in"
+                  className="bg-[var(--color-navy-dark)] text-white hover:bg-[var(--color-primary)] px-5 py-2.5 rounded-lg font-medium transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                >
+                  אזור אישי
+                </Link>
+              </SignedOut>
+              <SignedIn>
+                <Link
+                  href="/dashboard"
+                  className="bg-[var(--color-navy-dark)] text-white hover:bg-[var(--color-primary)] px-5 py-2.5 rounded-lg font-medium transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                >
+                  אזור אישי
+                </Link>
+              </SignedIn>
+            </div>
           </div>
         </div>
-      </header>
+      </nav>
 
-      {/* Hero */}
-      <section className="max-w-6xl mx-auto px-4 py-20 text-center">
-        <h2 className="text-4xl md:text-5xl font-extrabold text-[var(--color-primary)] mb-6 leading-tight">
-          הגישו תביעה קטנה
-          <br />
-          <span className="bg-gradient-to-l from-[var(--color-ai-gradient-from)] to-[var(--color-ai-gradient-to)] bg-clip-text text-transparent">
-            בעזרת AI
-          </span>
-        </h2>
-        <p className="text-xl text-[var(--color-text-secondary)] mb-10 max-w-2xl mx-auto">
-          ספרו את הסיפור שלכם בשיחה פשוטה, ואנחנו נכין תביעה משפטית מקצועית
-          תוך דקות. בלי טפסים מסובכים, בלי ידע משפטי.
-        </p>
-        <Link
-          href="/chat"
-          className="inline-flex items-center gap-2 px-8 py-4 text-lg font-semibold text-white bg-gradient-to-l from-[var(--color-ai-gradient-from)] to-[var(--color-ai-gradient-to)] rounded-xl hover:opacity-90 transition shadow-lg"
-        >
-          💬 התחילו שיחה עם העוזר המשפטי
-        </Link>
-      </section>
+      {/* Hero Section */}
+      <div className="relative bg-[var(--color-navy-dark)] overflow-hidden">
+        {/* Abstract Background */}
+        <div className="absolute inset-0 opacity-10">
+          <svg className="h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <path d="M0 100 C 20 0 50 0 100 100 Z" fill="url(#grad1)" />
+            <defs>
+              <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style={{ stopColor: "white", stopOpacity: 1 }} />
+                <stop offset="100%" style={{ stopColor: "#C5A059", stopOpacity: 1 }} />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
 
-      {/* How it works */}
-      <section className="max-w-6xl mx-auto px-4 py-16">
-        <h3 className="text-2xl font-bold text-center mb-12">איך זה עובד?</h3>
-        <div className="grid md:grid-cols-3 gap-8">
-          {[
-            {
-              step: "1",
-              title: "ספרו את הסיפור",
-              desc: "שוחחו עם העוזר המשפטי שלנו בשפה פשוטה - כמו שיחה עם חבר",
-            },
-            {
-              step: "2",
-              title: "קבלו טיוטת תביעה",
-              desc: "ה-AI מנתח את המידע ויוצר מסמך תביעה מקצועי עם סעיפי חוק רלוונטיים",
-            },
-            {
-              step: "3",
-              title: "הגישו לבית המשפט",
-              desc: "עיברו על הטיוטה, ערכו במידת הצורך, והורידו PDF מוכן להגשה",
-            },
-          ].map((item) => (
-            <div
-              key={item.step}
-              className="bg-[var(--color-surface)] rounded-2xl p-8 text-center shadow-sm border border-[var(--color-border)]"
-            >
-              <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-gradient-to-l from-[var(--color-ai-gradient-from)] to-[var(--color-ai-gradient-to)] flex items-center justify-center text-white font-bold text-lg">
-                {item.step}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32 relative z-10">
+          <div className="lg:grid lg:grid-cols-12 lg:gap-16 items-center">
+            {/* Text Content */}
+            <div className="lg:col-span-6 text-center lg:text-right mb-12 lg:mb-0">
+              <div className="inline-flex items-center px-3 py-1 rounded-full border border-[var(--color-gold)]/30 bg-[var(--color-gold)]/10 text-[var(--color-gold)] text-sm font-medium mb-6">
+                <span className="ml-2 w-2 h-2 rounded-full bg-[var(--color-gold)] animate-pulse-gold" />
+                חדש: ניסוח תביעה באמצעות AI
               </div>
-              <h4 className="text-lg font-semibold mb-2">{item.title}</h4>
-              <p className="text-[var(--color-text-secondary)]">{item.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Claim types */}
-      <section className="max-w-6xl mx-auto px-4 py-16">
-        <h3 className="text-2xl font-bold text-center mb-12">
-          סוגי תביעות שאנחנו מטפלים בהם
-        </h3>
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {claimTypes.map((type) => (
-            <div
-              key={type.title}
-              className="bg-[var(--color-surface)] rounded-2xl p-6 shadow-sm border border-[var(--color-border)] hover:shadow-md transition"
-            >
-              <div className="text-4xl mb-4">{type.icon}</div>
-              <h4 className="text-lg font-semibold mb-2">{type.title}</h4>
-              <p className="text-sm text-[var(--color-text-secondary)]">
-                {type.description}
+              <h1 className="text-4xl md:text-6xl font-extrabold text-white tracking-tight leading-tight mb-6">
+                התביעה שלך <br />
+                <span className="text-gradient-gold">מתחילה כאן.</span>
+              </h1>
+              <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                פלטפורמה משפטית חכמה לניהול תביעות קטנות. ללא צורך בידע משפטי
+                מוקדם, בליווי בינה מלאכותית ובדיקת מומחים. מהיר, פשוט והוגן.
               </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                <Link
+                  href="/chat"
+                  className="inline-flex items-center justify-center px-8 py-4 border border-transparent text-base font-bold rounded-xl text-[var(--color-navy-dark)] bg-[var(--color-gold)] hover:bg-[var(--color-gold-hover)] transition-all shadow-[0_0_20px_rgba(197,160,89,0.3)] hover:shadow-[0_0_30px_rgba(197,160,89,0.5)]"
+                >
+                  התחל עכשיו
+                  <span className="material-icons-outlined mr-2">arrow_back</span>
+                </Link>
+                <a
+                  href="#how-it-works"
+                  className="inline-flex items-center justify-center px-8 py-4 border border-gray-600 text-base font-medium rounded-xl text-white hover:bg-white/10 transition-colors"
+                >
+                  איך זה עובד?
+                </a>
+              </div>
+              <div className="mt-8 flex items-center justify-center lg:justify-start gap-6 text-sm text-gray-400">
+                <div className="flex items-center gap-2">
+                  <span className="material-icons-outlined text-[var(--color-gold)] text-lg">verified_user</span>
+                  מאובטח ומוצפן
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="material-icons-outlined text-[var(--color-gold)] text-lg">gavel</span>
+                  בדיקת עו&quot;ד
+                </div>
+              </div>
             </div>
-          ))}
+
+            {/* Chat UI Mockup */}
+            <div className="lg:col-span-6 relative">
+              <div className="relative bg-[var(--color-navy-light)]/40 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden transform rotate-1 hover:rotate-0 transition-transform duration-500">
+                {/* Chat Header */}
+                <div className="px-6 py-4 bg-[var(--color-navy-dark)]/80 border-b border-white/5 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="relative">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[var(--color-primary)] to-blue-400 flex items-center justify-center">
+                        <span className="material-icons-outlined text-white text-lg">smart_toy</span>
+                      </div>
+                      <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-[var(--color-navy-dark)] rounded-full" />
+                    </div>
+                    <div>
+                      <h3 className="text-white font-medium text-sm">היועץ של תגיש לי</h3>
+                      <p className="text-gray-400 text-xs">מחובר כעת - מופעל ע&quot;י AI</p>
+                    </div>
+                  </div>
+                  <span className="material-icons-outlined text-gray-500">more_vert</span>
+                </div>
+
+                {/* Chat Body */}
+                <div className="p-6 h-[400px] overflow-y-auto space-y-4 bg-[var(--color-navy-light)]/20">
+                  {/* Bot Message */}
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[var(--color-primary)]/20 flex-shrink-0 flex items-center justify-center">
+                      <span className="material-icons-outlined text-[var(--color-primary)] text-sm">smart_toy</span>
+                    </div>
+                    <div className="bg-white/5 border border-white/10 rounded-2xl rounded-tr-none p-4 max-w-[85%]">
+                      <p className="text-gray-200 text-sm leading-relaxed">
+                        שלום! אני כאן כדי לעזור לך להגיש את התביעה הקטנה שלך. ספר לי בקצרה, מה קרה?
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* User Message */}
+                  <div className="flex items-start gap-3 flex-row-reverse">
+                    <div className="w-8 h-8 rounded-full bg-[var(--color-gold)]/20 flex-shrink-0 flex items-center justify-center">
+                      <span className="material-icons-outlined text-[var(--color-gold)] text-sm">person</span>
+                    </div>
+                    <div className="bg-[var(--color-primary)]/90 text-white rounded-2xl rounded-tl-none p-4 max-w-[85%] shadow-lg">
+                      <p className="text-sm leading-relaxed">
+                        הזמנתי ספה מחנות רהיטים לפני חצי שנה, והיא עדיין לא הגיעה. הם מסרבים להחזיר לי את הכסף.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Bot Response with buttons */}
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[var(--color-primary)]/20 flex-shrink-0 flex items-center justify-center">
+                      <span className="material-icons-outlined text-[var(--color-primary)] text-sm">smart_toy</span>
+                    </div>
+                    <div className="bg-white/5 border border-white/10 rounded-2xl rounded-tr-none p-4 max-w-[85%]">
+                      <p className="text-gray-200 text-sm leading-relaxed mb-2">
+                        מצטער לשמוע. זה נשמע כמו מקרה קלאסי של הפרת חוזה וחוק הגנת הצרכן. יש לך את הקבלה או אישור ההזמנה?
+                      </p>
+                      <div className="flex gap-2 mt-3">
+                        <button className="px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-lg text-xs text-white transition-colors">
+                          כן, יש לי
+                        </button>
+                        <button className="px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-lg text-xs text-white transition-colors">
+                          לא מוצא כרגע
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Chat Input */}
+                <div className="p-4 bg-[var(--color-navy-dark)]/60 border-t border-white/5">
+                  <div className="relative">
+                    <input
+                      type="text"
+                      disabled
+                      placeholder="הקלד תשובה..."
+                      className="w-full bg-white/10 border border-white/10 rounded-xl px-4 py-3 pl-12 text-sm text-white placeholder-gray-500 focus:outline-none"
+                    />
+                    <button className="absolute left-2 top-1/2 transform -translate-y-1/2 p-1.5 bg-[var(--color-gold)] rounded-lg text-[var(--color-navy-dark)]">
+                      <span className="material-icons-outlined text-sm">send</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Decorative blurs */}
+              <div className="absolute -top-10 -right-10 w-64 h-64 bg-[var(--color-primary)]/20 rounded-full blur-3xl -z-10" />
+              <div className="absolute -bottom-10 -left-10 w-64 h-64 bg-[var(--color-gold)]/10 rounded-full blur-3xl -z-10" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Trust Bar */}
+      <div className="border-b border-gray-200 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <p className="text-center text-sm font-medium text-gray-400 mb-6">
+            גופים שסיקרו אותנו ומשתפים פעולה
+          </p>
+          <div className="flex flex-wrap justify-center gap-8 md:gap-16 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
+            {[
+              { icon: "article", name: "כלכליסט" },
+              { icon: "feed", name: "גלובס" },
+              { icon: "gavel", name: "לשכת עורכי הדין" },
+              { icon: "tv", name: "החדשות" },
+            ].map((item) => (
+              <div key={item.name} className="flex items-center gap-2 text-xl font-bold text-gray-800">
+                <span className="material-icons-outlined">{item.icon}</span>
+                <span>{item.name}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* How it Works */}
+      <section id="how-it-works" className="py-20 md:py-28 bg-[var(--color-bg-light)] relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-[var(--color-navy-dark)] mb-4">
+              תהליך פשוט, חכם ומהיר
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              אנחנו הופכים את הבירוקרטיה המשפטית לתהליך דיגיטלי נגיש ב-4 שלבים פשוטים.
+            </p>
+          </div>
+          <div className="relative">
+            {/* Connecting line */}
+            <div className="hidden md:block absolute top-12 left-0 right-0 h-0.5 bg-gray-200 -z-0 mx-16" />
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-4 relative z-10">
+              {[
+                { icon: "chat", title: "1. שיחה עם הבוט", desc: "עונים על מספר שאלות פשוטות בשפה טבעית. ה-AI שלנו מבין את המקרה שלך.", color: "text-[var(--color-primary)]", hoverBorder: "group-hover:border-[var(--color-primary)]" },
+                { icon: "description", title: "2. בניית כתב תביעה", desc: "המערכת מייצרת מסמך משפטי מקצועי ומנומק, מוכן להגשה, בהתבסס על המידע.", color: "text-[var(--color-gold)]", hoverBorder: "group-hover:border-[var(--color-gold)]" },
+                { icon: "fact_check", title: "3. בדיקת עו\"ד", desc: "עורך דין מטעמנו עובר על המסמכים כדי לוודא דיוק מקסימלי לפני ההגשה.", color: "text-[var(--color-primary)]", hoverBorder: "group-hover:border-[var(--color-primary)]" },
+                { icon: "account_balance", title: "4. הגשה לבית המשפט", desc: "אנחנו מגישים את התביעה באופן מקוון לבית המשפט. הטיפול עובר לידיך לדיון.", color: "text-[var(--color-gold)]", hoverBorder: "group-hover:border-[var(--color-gold)]" },
+              ].map((step) => (
+                <div key={step.title} className="group text-center">
+                  <div className={`w-24 h-24 mx-auto bg-white border-2 border-gray-100 rounded-full flex items-center justify-center mb-6 shadow-sm ${step.hoverBorder} group-hover:shadow-lg transition-all duration-300`}>
+                    <span className={`material-icons-outlined text-4xl ${step.color} group-hover:scale-110 transition-transform`}>
+                      {step.icon}
+                    </span>
+                  </div>
+                  <h3 className="text-xl font-bold text-[var(--color-navy-dark)] mb-2">{step.title}</h3>
+                  <p className="text-gray-500 text-sm px-4">{step.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="max-w-6xl mx-auto px-4 py-20 text-center">
-        <div className="bg-gradient-to-l from-[var(--color-ai-gradient-from)] to-[var(--color-ai-gradient-to)] rounded-3xl p-12 text-white">
-          <h3 className="text-3xl font-bold mb-4">מוכנים להגיש תביעה?</h3>
-          <p className="text-lg mb-8 opacity-90">
-            התביעה הראשונה שלכם - בחינם. בלי כרטיס אשראי.
-          </p>
-          <Link
-            href="/sign-up"
-            className="inline-flex items-center gap-2 px-8 py-4 text-lg font-semibold text-[var(--color-primary)] bg-white rounded-xl hover:bg-gray-100 transition"
-          >
-            הרשמו עכשיו - חינם
-          </Link>
+      {/* Features Section */}
+      <section id="features" className="py-20 bg-white border-y border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col lg:flex-row gap-12 items-center">
+            <div className="lg:w-1/2">
+              <h2 className="text-3xl md:text-4xl font-bold text-[var(--color-navy-dark)] mb-6">
+                למה לבחור ב<span className="text-[var(--color-primary)]">תגיש לי</span>?
+              </h2>
+              <p className="text-lg text-gray-600 mb-8">
+                רוב האנשים מוותרים על זכויותיהם כי הם חוששים מההליך המשפטי. אנחנו משנים את המשוואה עם טכנולוגיה.
+              </p>
+              <div className="space-y-6">
+                {[
+                  { icon: "psychology", title: "ניסוח משפטי מדויק", desc: "המערכת משתמשת במאגר של אלפי פסקי דין כדי לנסח את הטיעונים הטובים ביותר למקרה שלך.", iconBg: "bg-[var(--color-gold)]/20", iconColor: "text-[var(--color-gold)]" },
+                  { icon: "savings", title: "חיסכון אדיר בעלויות", desc: "במקום לשלם אלפי שקלים לעורך דין, קבל שירות מקצועי במחיר קבוע ושקוף.", iconBg: "bg-[var(--color-primary)]/20", iconColor: "text-[var(--color-primary)]" },
+                  { icon: "speed", title: "מהירות שיא", desc: "התהליך אצלנו לוקח בממוצע 20 דקות. מכל מקום, בכל זמן.", iconBg: "bg-gray-200", iconColor: "text-gray-600" },
+                ].map((feature) => (
+                  <div key={feature.title} className="flex gap-4 p-4 rounded-xl hover:bg-[var(--color-bg-light)] transition-colors cursor-default">
+                    <div className={`flex-shrink-0 w-12 h-12 ${feature.iconBg} rounded-lg flex items-center justify-center`}>
+                      <span className={`material-icons-outlined ${feature.iconColor} text-2xl`}>{feature.icon}</span>
+                    </div>
+                    <div>
+                      <h4 className="text-lg font-bold text-[var(--color-navy-dark)]">{feature.title}</h4>
+                      <p className="text-gray-500 text-sm">{feature.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Document Preview Card */}
+            <div className="lg:w-1/2 relative">
+              <div className="relative z-10 bg-white p-6 rounded-2xl shadow-xl border border-gray-100">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 bg-red-500 rounded-full" />
+                    <div className="w-3 h-3 bg-yellow-500 rounded-full" />
+                    <div className="w-3 h-3 bg-green-500 rounded-full" />
+                  </div>
+                  <span className="text-xs text-gray-400 font-mono">case_file_preview.pdf</span>
+                </div>
+                <div className="space-y-3 opacity-60">
+                  <div className="h-4 bg-gray-200 rounded w-3/4" />
+                  <div className="h-4 bg-gray-200 rounded w-full" />
+                  <div className="h-4 bg-gray-200 rounded w-5/6" />
+                  <div className="h-4 bg-gray-200 rounded w-4/5" />
+                  <div className="h-20 bg-gray-100 rounded w-full border border-dashed border-gray-300 flex items-center justify-center">
+                    <span className="text-xs text-gray-400">חתימה דיגיטלית מאושרת</span>
+                  </div>
+                </div>
+                {/* Badge */}
+                <div className="absolute -bottom-6 -left-6 bg-[var(--color-gold)] text-[var(--color-navy-dark)] px-6 py-4 rounded-xl shadow-lg flex items-center gap-3">
+                  <span className="material-icons-outlined text-2xl">stars</span>
+                  <div>
+                    <p className="font-bold text-sm">מוכן להגשה</p>
+                    <p className="text-xs opacity-80">בדיוק לפי התקנות</p>
+                  </div>
+                </div>
+              </div>
+              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-tr from-[var(--color-primary)]/10 to-transparent rounded-full -z-0" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section id="pricing" className="py-20 bg-[var(--color-bg-light)]">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-[var(--color-navy-dark)] mb-3">מחיר פשוט ושקוף</h2>
+            <p className="text-gray-500">הכל כלול. אין עמלות נסתרות, אין אחוזים מהזכייה.</p>
+          </div>
+          <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-200 relative">
+            <div className="absolute top-0 right-0 bg-[var(--color-primary)] text-white text-xs font-bold px-4 py-1 rounded-bl-xl">
+              הכי משתלם
+            </div>
+            <div className="p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8">
+              <div className="flex-1">
+                <h3 className="text-2xl font-bold text-[var(--color-navy-dark)] mb-2">חבילת הגשה מלאה</h3>
+                <p className="text-gray-500 mb-6 text-sm">אנחנו דואגים להכל, מהניסוח ועד קבלת מספר התיק.</p>
+                <ul className="space-y-4">
+                  {[
+                    'ניסוח כתב תביעה ע"י AI',
+                    'בדיקה ואישור ע"י עורך דין',
+                    "אגרת פתיחת תיק כלולה (עד סכום מסוים)",
+                    "תמיכה בוואטסאפ לאורך התהליך",
+                  ].map((item) => (
+                    <li key={item} className="flex items-center gap-3 text-sm md:text-base text-gray-700">
+                      <span className="material-icons-outlined text-green-500">check_circle</span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="w-full md:w-auto bg-[var(--color-bg-light)] p-6 rounded-2xl text-center min-w-[250px]">
+                <p className="text-gray-500 text-sm mb-1">תשלום חד פעמי</p>
+                <div className="text-5xl font-bold text-[var(--color-navy-dark)] mb-1">₪450</div>
+                <p className="text-gray-400 text-xs mb-6">+ מע&quot;מ</p>
+                <Link
+                  href="/chat"
+                  className="block w-full bg-[var(--color-gold)] hover:bg-[var(--color-gold-hover)] text-[var(--color-navy-dark)] font-bold py-4 rounded-xl shadow-lg transition-transform transform hover:-translate-y-1 text-center"
+                >
+                  התחל תביעה עכשיו
+                </Link>
+                <p className="text-xs text-gray-400 mt-4">החזר כספי מלא במידה ולא הוגש</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-2xl font-bold text-center text-[var(--color-navy-dark)] mb-12">
+            מה אומרים הלקוחות?
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              { quote: "הייתי סקפטי בהתחלה לגבי AI ומשפטים, אבל הניסוח היה כל כך מקצועי שהנתבע העדיף להתפשר עוד לפני הדיון. שירות מדהים.", name: "רון לוי", type: "תביעת צרכנות, תל אביב" },
+              { quote: "פשוט הצלתם לי 3000 שקל. התהליך היה כל כך פשוט, כמו להתכתב בוואטסאפ. ממליצה בחום לכל מי שמפחד מבירוקרטיה.", name: "דנה כהן", type: "תביעת נזיקין, חיפה" },
+              { quote: "המהירות שבה הכל קרה הפתיעה אותי. תוך יומיים התביעה כבר הייתה במערכת 'נט המשפט'. תודה על השירות!", name: "יוסי ב.", type: "תביעת ספק, ראשון לציון" },
+            ].map((testimonial) => (
+              <div key={testimonial.name} className="bg-[var(--color-bg-light)] p-8 rounded-2xl relative">
+                <span className="material-icons-outlined text-4xl text-[var(--color-primary)]/20 absolute top-4 left-4">
+                  format_quote
+                </span>
+                <p className="text-gray-600 mb-6 relative z-10 italic">&ldquo;{testimonial.quote}&rdquo;</p>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
+                    <span className="material-icons-outlined text-gray-500 text-sm">person</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-[var(--color-navy-dark)] text-sm">{testimonial.name}</h4>
+                    <p className="text-xs text-gray-400">{testimonial.type}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-[var(--color-border)] bg-[var(--color-surface)] py-8">
-        <div className="max-w-6xl mx-auto px-4 text-center text-sm text-[var(--color-text-secondary)]">
-          <p className="mb-2">
-            ⚠️ תגישלי הוא כלי עזר טכנולוגי בלבד ואינו מהווה תחליף לייעוץ
-            משפטי מקצועי.
-          </p>
-          <p>© {new Date().getFullYear()} תגישלי. כל הזכויות שמורות.</p>
+      <footer className="bg-[var(--color-navy-dark)] text-white border-t border-gray-800 pt-16 pb-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-8 h-8 bg-white text-[var(--color-navy-dark)] rounded-lg flex items-center justify-center font-bold text-xl">
+                  ת
+                </div>
+                <span className="font-bold text-2xl tracking-tight">תגיש לי</span>
+              </div>
+              <p className="text-gray-400 text-sm leading-relaxed mb-6">
+                פלטפורמת הליגל-טק המובילה בישראל להגשת תביעות קטנות. מנגישים את הצדק לכולם באמצעות טכנולוגיה.
+              </p>
+            </div>
+            <div>
+              <h4 className="font-bold text-lg mb-4 text-[var(--color-gold)]">שירותים</h4>
+              <ul className="space-y-2 text-sm text-gray-400">
+                <li><a href="#" className="hover:text-white transition-colors">תביעות צרכנות</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">תביעות ספאם</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">נזקי רכוש</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">הלנת שכר</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-bold text-lg mb-4 text-[var(--color-gold)]">חברה</h4>
+              <ul className="space-y-2 text-sm text-gray-400">
+                <li><a href="#" className="hover:text-white transition-colors">אודות</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">קריירה</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">בלוג משפטי</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">צור קשר</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-bold text-lg mb-4 text-[var(--color-gold)]">משפטי</h4>
+              <ul className="space-y-2 text-sm text-gray-400">
+                <li><a href="#" className="hover:text-white transition-colors">תנאי שימוש</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">מדיניות פרטיות</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">הצהרת נגישות</a></li>
+              </ul>
+              <div className="mt-6 flex items-center gap-2 text-xs text-gray-500 border border-gray-700 rounded-lg p-2">
+                <span className="material-icons-outlined">lock</span>
+                <span>מאובטח בסטנדרט SSL מחמיר</span>
+              </div>
+            </div>
+          </div>
+          <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500">
+            <p>© 2026 תגיש לי בע&quot;מ. כל הזכויות שמורות.</p>
+            <p className="mt-2 md:mt-0 text-center md:text-right max-w-xl">
+              *השירות אינו מהווה ייעוץ משפטי ותחליף לייצוג ע&quot;י עורך דין בבית המשפט. המערכת מסייעת בניסוח והגשה טכנית בלבד.
+            </p>
+          </div>
         </div>
       </footer>
+
+      {/* Floating Chat Button */}
+      <Link
+        href="/chat"
+        className="fixed bottom-6 left-6 z-40 flex items-center gap-3 bg-[var(--color-primary)] hover:bg-blue-700 text-white rounded-full p-4 shadow-2xl transition-all hover:scale-105 group"
+      >
+        <span className="font-bold hidden group-hover:block transition-all pl-2">התחל צ&apos;אט</span>
+        <span className="material-icons-outlined">chat</span>
+      </Link>
     </div>
   );
 }
