@@ -2,7 +2,7 @@ import { v } from "convex/values";
 import { action } from "./_generated/server";
 import { api } from "./_generated/api";
 
-const SYSTEM_PROMPT = `אתה עוזר משפטי AI בשם "עו"ד דיגיטלי" באתר תגישלי.
+const SYSTEM_PROMPT = `אתה עוזר משפטי AI בשם "עו"ד דיגיטלי" באתר תגיש לי.
 תפקידך לעזור למשתמשים להגיש תביעות משפטיות קטנות בישראל.
 
 הנחיות:
@@ -38,12 +38,17 @@ const SYSTEM_PROMPT = `אתה עוזר משפטי AI בשם "עו"ד דיגיט�
 - שאלה אחת בכל פנייה
 - השתמש באימוג'ים במידה (✓ ✗ ⚠️ 💡) לבהירות`;
 
+interface AiMessage {
+  role: "user" | "assistant" | "system";
+  content: string;
+}
+
 export const chat = action({
   args: {
     conversationId: v.id("conversations"),
     userMessage: v.string(),
   },
-  handler: async (ctx, args) => {
+  handler: async (ctx, args): Promise<string> => {
     // Get conversation history
     const messages = await ctx.runQuery(api.messages.getByConversation, {
       conversationId: args.conversationId,
@@ -57,28 +62,35 @@ export const chat = action({
     });
 
     // Build messages array for AI
-    const aiMessages = [
-      { role: "system" as const, content: SYSTEM_PROMPT },
-      ...messages.map((m) => ({
+    const aiMessages: AiMessage[] = [
+      { role: "system", content: SYSTEM_PROMPT },
+      ...messages.map((m: { role: string; content: string }) => ({
         role: m.role as "user" | "assistant",
         content: m.content,
       })),
-      { role: "user" as const, content: args.userMessage },
+      { role: "user", content: args.userMessage },
     ];
 
     // Call Gemini API
-    const apiKey = process.env.GEMINI_API_KEY;
+    const apiKey: string = process.env.GEMINI_API_KEY || "";
     if (!apiKey) throw new Error("GEMINI_API_KEY not configured");
 
-    const response = await fetch(
+    const fetchResponse: Response = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          contents: aiMessages.map((m) => ({
-            role: m.role === "assistant" ? "model" : m.role === "system" ? "user" : "user",
-            parts: [{ text: m.role === "system" ? `[System Instructions]\n${m.content}` : m.content }],
+          contents: aiMessages.map((m: AiMessage) => ({
+            role: m.role === "assistant" ? "model" : "user",
+            parts: [
+              {
+                text:
+                  m.role === "system"
+                    ? `[System Instructions]\n${m.content}`
+                    : m.content,
+              },
+            ],
           })),
           generationConfig: {
             temperature: 0.7,
@@ -86,22 +98,39 @@ export const chat = action({
             topP: 0.9,
           },
           safetySettings: [
-            { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
-            { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
-            { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_NONE" },
-            { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" },
+            {
+              category: "HARM_CATEGORY_HARASSMENT",
+              threshold: "BLOCK_NONE",
+            },
+            {
+              category: "HARM_CATEGORY_HATE_SPEECH",
+              threshold: "BLOCK_NONE",
+            },
+            {
+              category: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+              threshold: "BLOCK_NONE",
+            },
+            {
+              category: "HARM_CATEGORY_DANGEROUS_CONTENT",
+              threshold: "BLOCK_NONE",
+            },
           ],
         }),
       }
     );
 
-    if (!response.ok) {
-      const error = await response.text();
-      throw new Error(`Gemini API error: ${error}`);
+    if (!fetchResponse.ok) {
+      const errorText: string = await fetchResponse.text();
+      throw new Error(`Gemini API error: ${errorText}`);
     }
 
-    const data = await response.json();
-    const aiResponse =
+    const data: {
+      candidates?: Array<{
+        content?: { parts?: Array<{ text?: string }> };
+      }>;
+    } = await fetchResponse.json();
+
+    const aiResponse: string =
       data.candidates?.[0]?.content?.parts?.[0]?.text ||
       "מצטער, נתקלתי בבעיה. אנא נסו שוב.";
 
