@@ -9,7 +9,7 @@ export default function Home() {
       <Navbar />
 
       {/* Hero Section */}
-      <div className="relative bg-[var(--color-navy-dark)] overflow-hidden">
+      <div className="relative bg-[var(--color-navy-dark)]">
         {/* Abstract Background */}
         <div className="absolute inset-0 opacity-10">
           <svg className="h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -24,9 +24,9 @@ export default function Home() {
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32 relative z-10">
-          <div className="lg:grid lg:grid-cols-12 lg:gap-16 items-center">
+          <div className="lg:grid lg:grid-cols-12 lg:gap-12 items-center">
             {/* Text Content */}
-            <div className="lg:col-span-6 text-center lg:text-right mb-12 lg:mb-0">
+            <div className="lg:col-span-5 text-center lg:text-right mb-12 lg:mb-0">
               <div className="inline-flex items-center px-3 py-1 rounded-full border border-[var(--color-gold)]/30 bg-[var(--color-gold)]/10 text-[var(--color-gold)] text-sm font-medium mb-6">
                 <span className="ml-2 w-2 h-2 rounded-full bg-[var(--color-gold)] animate-pulse-gold" />
                 חדש: ניסוח תביעה באמצעות AI
@@ -67,7 +67,7 @@ export default function Home() {
             </div>
 
             {/* Live Chat */}
-            <div className="lg:col-span-6 relative">
+            <div className="lg:col-span-7 relative">
               <HeroChat />
               
             </div>

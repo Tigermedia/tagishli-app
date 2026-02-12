@@ -95,9 +95,9 @@ export function HeroChat() {
   };
 
   return (
-    <div className="relative bg-[var(--color-navy-light)]/40 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden">
+    <div className="relative bg-[#0a1628] backdrop-blur-xl border-2 border-[var(--color-gold)]/30 rounded-2xl shadow-[0_0_60px_rgba(197,160,89,0.15),0_20px_60px_rgba(0,0,0,0.5)] overflow-hidden">
       {/* Header */}
-      <div className="px-6 py-4 bg-[var(--color-navy-dark)]/80 border-b border-white/5 flex items-center justify-between">
+      <div className="px-6 py-4 bg-[#060f1d] border-b border-[var(--color-gold)]/10 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="relative">
             <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[var(--color-primary)] to-blue-400 flex items-center justify-center">
@@ -114,7 +114,7 @@ export function HeroChat() {
       </div>
 
       {/* Chat Body */}
-      <div className="p-6 h-[400px] overflow-y-auto space-y-4 bg-[var(--color-navy-light)]/20 scrollbar-hide">
+      <div className="p-6 h-[420px] overflow-y-auto space-y-4 scrollbar-hide">
         {/* Welcome state */}
         {!started && localMessages.length === 0 && (
           <div className="text-center py-8">
@@ -193,7 +193,7 @@ export function HeroChat() {
       </div>
 
       {/* Input */}
-      <div className="p-4 bg-[var(--color-navy-dark)]/60 border-t border-white/5">
+      <div className="p-4 bg-[#060f1d] border-t border-[var(--color-gold)]/10">
         <div className="relative">
           <input
             ref={inputRef}
