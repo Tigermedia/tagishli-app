@@ -60,11 +60,12 @@ export function PhoneVerification({ onVerified, onPhoneCollected }: Props) {
             });
             // For sign-in, prepareFirstFactor sends the code
             if (result.status === "needs_first_factor") {
+              const phoneFactor = result.supportedFirstFactors?.find(
+                (f: Record<string, unknown>) => f.strategy === "phone_code"
+              ) as Record<string, unknown> | undefined;
               await signIn.prepareFirstFactor({
                 strategy: "phone_code",
-                phoneNumberId: result.supportedFirstFactors?.find(
-                  (f: { strategy: string }) => f.strategy === "phone_code"
-                )?.phoneNumberId || "",
+                phoneNumberId: (phoneFactor?.phoneNumberId as string) || "",
               });
             }
             setStep("code");
