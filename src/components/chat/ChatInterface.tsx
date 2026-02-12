@@ -119,7 +119,39 @@ export function ChatInterface({
 
   const handleSuggestion = (text: string) => {
     setInput(text);
-    inputRef.current?.focus();
+    // Auto-send the suggestion
+    setTimeout(() => {
+      const fakeInput = text;
+      setInput("");
+      setIsTyping(true);
+
+      if (isAuthenticated && conversationId && chat) {
+        chat({ conversationId, userMessage: fakeInput })
+          .catch(console.error)
+          .finally(() => { setIsTyping(false); inputRef.current?.focus(); });
+      } else {
+        // Anonymous mode
+        const newUserMsg: LocalMessage = { id: `user-${Date.now()}`, role: "user", content: fakeInput };
+        setLocalMessages((prev) => [...prev, newUserMsg]);
+        const newCount = userMessageCount + 1;
+        setUserMessageCount(newCount);
+
+        setTimeout(() => {
+          let aiResponse: string;
+          if (newCount === 1) aiResponse = "הבנתי. אני רוצה להבין טוב יותר את המקרה שלך. מי הצד השני? (שם החברה או האדם שאתה רוצה לתבוע)";
+          else if (newCount === 2) aiResponse = "תודה. מתי זה קרה? (תאריך משוער)";
+          else if (newCount === 3) aiResponse = "וכמה אתה רוצה לתבוע? (סכום בשקלים)";
+          else if (newCount >= VERIFY_AFTER_MESSAGES - 2) {
+            aiResponse = "מצוין! אספתי מספיק מידע להתחיל לנסח את התביעה. עכשיו אני צריך לאמת את זהותך כדי לשמור הכל.";
+            setTimeout(() => setShowVerification(true), 500);
+          } else aiResponse = "תודה על המידע. יש לך ראיות או מסמכים שקשורים למקרה? (קבלות, צילומי מסך, התכתבויות)";
+
+          setLocalMessages((prev) => [...prev, { id: `ai-${Date.now()}`, role: "assistant", content: aiResponse }]);
+          setIsTyping(false);
+          inputRef.current?.focus();
+        }, 1500);
+      }
+    }, 50);
   };
 
   return (
@@ -220,9 +252,9 @@ export function ChatInterface({
             <button
               onClick={handleSend}
               disabled={!input.trim() || isTyping || (showVerification && !isAuthenticated)}
-              className="absolute left-2 top-1/2 transform -translate-y-1/2 p-2 bg-[var(--color-gold)] hover:bg-[var(--color-gold-hover)] rounded-lg text-[var(--color-navy-dark)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 w-9 h-9 flex items-center justify-center bg-[var(--color-gold)] hover:bg-[var(--color-gold-hover)] rounded-full text-[var(--color-navy-dark)] disabled:opacity-30 disabled:cursor-not-allowed transition-all hover:scale-105 shadow-md"
             >
-              <span className="material-icons-outlined text-sm">send</span>
+              <span className="material-icons-outlined text-lg">arrow_back</span>
             </button>
           </div>
           <p className="text-center text-xs text-gray-600 mt-2">
