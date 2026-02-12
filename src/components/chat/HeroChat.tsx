@@ -95,9 +95,9 @@ export function HeroChat() {
   };
 
   return (
-    <div className="relative bg-[#0a1628] backdrop-blur-xl border-2 border-[var(--color-gold)]/30 rounded-2xl shadow-[0_0_60px_rgba(197,160,89,0.15),0_20px_60px_rgba(0,0,0,0.5)] overflow-hidden">
+    <div className="relative bg-white rounded-2xl shadow-[0_20px_80px_rgba(0,0,0,0.4)] overflow-hidden">
       {/* Header */}
-      <div className="px-6 py-4 bg-[#060f1d] border-b border-[var(--color-gold)]/10 flex items-center justify-between">
+      <div className="px-6 py-4 bg-[var(--color-navy-dark)] border-b border-gray-200 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="relative">
             <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[var(--color-primary)] to-blue-400 flex items-center justify-center">
@@ -114,11 +114,11 @@ export function HeroChat() {
       </div>
 
       {/* Chat Body */}
-      <div className="p-6 h-[420px] overflow-y-auto space-y-4 scrollbar-hide">
+      <div className="p-6 h-[420px] overflow-y-auto space-y-4 bg-gray-50 scrollbar-hide">
         {/* Welcome state */}
         {!started && localMessages.length === 0 && (
           <div className="text-center py-8">
-            <p className="text-gray-300 text-sm mb-6">ספרו לי בקצרה מה קרה, או בחרו נושא:</p>
+            <p className="text-gray-500 text-sm mb-6">ספרו לי בקצרה מה קרה, או בחרו נושא:</p>
             <div className="flex flex-wrap gap-2 justify-center">
               {[
                 "הזמנתי מוצר שלא הגיע",
@@ -129,7 +129,7 @@ export function HeroChat() {
                 <button
                   key={suggestion}
                   onClick={() => sendMessage(suggestion)}
-                  className="px-3 py-1.5 text-xs bg-white/10 hover:bg-white/20 rounded-lg text-white transition-colors"
+                  className="px-3 py-2 text-xs bg-white border border-gray-200 hover:border-[var(--color-gold)] hover:bg-[var(--color-gold)]/5 rounded-lg text-gray-700 transition-colors shadow-sm"
                 >
                   {suggestion}
                 </button>
@@ -152,8 +152,8 @@ export function HeroChat() {
             </div>
             <div className={`max-w-[85%] p-4 ${
               msg.role === "user"
-                ? "bg-[var(--color-primary)]/90 text-white rounded-2xl rounded-tl-none shadow-lg"
-                : "bg-white/5 border border-white/10 text-gray-200 rounded-2xl rounded-tr-none"
+                ? "bg-[var(--color-navy-dark)] text-white rounded-2xl rounded-tl-none shadow-md"
+                : "bg-white border border-gray-100 text-gray-800 rounded-2xl rounded-tr-none shadow-sm"
             }`}>
               <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.content}</p>
             </div>
@@ -176,7 +176,7 @@ export function HeroChat() {
             <div className="w-8 h-8 rounded-full bg-[var(--color-primary)]/20 flex-shrink-0 flex items-center justify-center">
               <span className="material-icons-outlined text-[var(--color-primary)] text-sm">smart_toy</span>
             </div>
-            <div className="bg-white/5 border border-white/10 rounded-2xl rounded-tr-none px-4 py-3">
+            <div className="bg-white border border-gray-100 rounded-2xl rounded-tr-none px-4 py-3 shadow-sm">
               <div className="flex items-center gap-2">
                 <span className="text-xs text-gray-400">מנסח תגובה</span>
                 <div className="flex gap-1">
@@ -193,7 +193,7 @@ export function HeroChat() {
       </div>
 
       {/* Input */}
-      <div className="p-4 bg-[#060f1d] border-t border-[var(--color-gold)]/10">
+      <div className="p-4 bg-white border-t border-gray-100">
         <div className="relative">
           <input
             ref={inputRef}
@@ -203,7 +203,7 @@ export function HeroChat() {
             onKeyDown={handleKeyDown}
             placeholder={showVerification && !isAuthenticated ? "אמתו את האימייל כדי להמשיך..." : "הקלידו תשובה..."}
             disabled={isTyping || (showVerification && !isAuthenticated)}
-            className="w-full bg-white/10 border border-white/10 rounded-xl px-4 py-3 pl-14 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/50 transition disabled:opacity-50"
+            className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 pl-14 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[var(--color-gold)]/50 focus:border-[var(--color-gold)]/50 transition disabled:opacity-50"
             dir="rtl"
           />
           <button
