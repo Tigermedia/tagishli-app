@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { HeroChat } from "@/components/chat/HeroChat";
 
 export default function Home() {
   return (
@@ -65,92 +66,10 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Chat UI Mockup */}
+            {/* Live Chat */}
             <div className="lg:col-span-6 relative">
-              <div className="relative bg-[var(--color-navy-light)]/40 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden transform rotate-1 hover:rotate-0 transition-transform duration-500">
-                {/* Chat Header */}
-                <div className="px-6 py-4 bg-[var(--color-navy-dark)]/80 border-b border-white/5 flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="relative">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[var(--color-primary)] to-blue-400 flex items-center justify-center">
-                        <span className="material-icons-outlined text-white text-lg">smart_toy</span>
-                      </div>
-                      <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-[var(--color-navy-dark)] rounded-full" />
-                    </div>
-                    <div>
-                      <h3 className="text-white font-medium text-sm">היועץ של תגיש לי</h3>
-                      <p className="text-gray-400 text-xs">מחובר כעת - מופעל ע&quot;י AI</p>
-                    </div>
-                  </div>
-                  <span className="material-icons-outlined text-gray-500">more_vert</span>
-                </div>
-
-                {/* Chat Body */}
-                <div className="p-6 h-[400px] overflow-y-auto space-y-4 bg-[var(--color-navy-light)]/20">
-                  {/* Bot Message */}
-                  <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 rounded-full bg-[var(--color-primary)]/20 flex-shrink-0 flex items-center justify-center">
-                      <span className="material-icons-outlined text-[var(--color-primary)] text-sm">smart_toy</span>
-                    </div>
-                    <div className="bg-white/5 border border-white/10 rounded-2xl rounded-tr-none p-4 max-w-[85%]">
-                      <p className="text-gray-200 text-sm leading-relaxed">
-                        שלום! אני כאן כדי לעזור לך להגיש את התביעה הקטנה שלך. ספר לי בקצרה, מה קרה?
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* User Message */}
-                  <div className="flex items-start gap-3 flex-row-reverse">
-                    <div className="w-8 h-8 rounded-full bg-[var(--color-gold)]/20 flex-shrink-0 flex items-center justify-center">
-                      <span className="material-icons-outlined text-[var(--color-gold)] text-sm">person</span>
-                    </div>
-                    <div className="bg-[var(--color-primary)]/90 text-white rounded-2xl rounded-tl-none p-4 max-w-[85%] shadow-lg">
-                      <p className="text-sm leading-relaxed">
-                        הזמנתי ספה מחנות רהיטים לפני חצי שנה, והיא עדיין לא הגיעה. הם מסרבים להחזיר לי את הכסף.
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Bot Response with buttons */}
-                  <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 rounded-full bg-[var(--color-primary)]/20 flex-shrink-0 flex items-center justify-center">
-                      <span className="material-icons-outlined text-[var(--color-primary)] text-sm">smart_toy</span>
-                    </div>
-                    <div className="bg-white/5 border border-white/10 rounded-2xl rounded-tr-none p-4 max-w-[85%]">
-                      <p className="text-gray-200 text-sm leading-relaxed mb-2">
-                        מצטער לשמוע. זה נשמע כמו מקרה קלאסי של הפרת חוזה וחוק הגנת הצרכן. יש לך את הקבלה או אישור ההזמנה?
-                      </p>
-                      <div className="flex gap-2 mt-3">
-                        <button className="px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-lg text-xs text-white transition-colors">
-                          כן, יש לי
-                        </button>
-                        <button className="px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-lg text-xs text-white transition-colors">
-                          לא מוצא כרגע
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Chat Input */}
-                <div className="p-4 bg-[var(--color-navy-dark)]/60 border-t border-white/5">
-                  <div className="relative">
-                    <input
-                      type="text"
-                      disabled
-                      placeholder="הקלד תשובה..."
-                      className="w-full bg-white/10 border border-white/10 rounded-xl px-4 py-3 pl-12 text-sm text-white placeholder-gray-500 focus:outline-none"
-                    />
-                    <button className="absolute left-2 top-1/2 transform -translate-y-1/2 p-1.5 bg-[var(--color-gold)] rounded-lg text-[var(--color-navy-dark)]">
-                      <span className="material-icons-outlined text-sm">send</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Decorative blurs */}
-              <div className="absolute -top-10 -right-10 w-64 h-64 bg-[var(--color-primary)]/20 rounded-full blur-3xl -z-10" />
-              <div className="absolute -bottom-10 -left-10 w-64 h-64 bg-[var(--color-gold)]/10 rounded-full blur-3xl -z-10" />
+              <HeroChat />
+              
             </div>
           </div>
         </div>
