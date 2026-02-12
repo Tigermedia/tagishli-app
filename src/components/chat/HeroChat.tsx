@@ -24,13 +24,17 @@ export function HeroChat() {
   const [conversationId, setConversationId] = useState<Id<"conversations"> | null>(null);
   const [started, setStarted] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const chatBodyRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const chat = useAction(api.ai.chat);
   const createConversation = useMutation(api.conversations.create);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    // Scroll only within the chat container, not the page
+    if (chatBodyRef.current) {
+      chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
+    }
   }, [localMessages, isTyping, showVerification]);
 
   useEffect(() => {
@@ -95,9 +99,9 @@ export function HeroChat() {
   };
 
   return (
-    <div className="relative bg-white rounded-2xl shadow-[0_20px_80px_rgba(0,0,0,0.4)] overflow-hidden">
+    <div className="relative bg-white rounded-2xl shadow-[0_20px_80px_rgba(0,0,0,0.4)]">
       {/* Header */}
-      <div className="px-6 py-4 bg-[var(--color-navy-dark)] border-b border-gray-200 flex items-center justify-between">
+      <div className="px-6 py-4 bg-[var(--color-navy-dark)] rounded-t-2xl border-b border-gray-200 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="relative">
             <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[var(--color-primary)] to-blue-400 flex items-center justify-center">
@@ -114,7 +118,7 @@ export function HeroChat() {
       </div>
 
       {/* Chat Body */}
-      <div className="p-6 h-[420px] overflow-y-auto space-y-4 bg-gray-50 scrollbar-hide">
+      <div ref={chatBodyRef} className="p-6 h-[420px] overflow-y-auto space-y-4 bg-gray-50 scrollbar-hide">
         {/* Welcome state */}
         {!started && localMessages.length === 0 && (
           <div className="text-center py-8">
@@ -189,11 +193,10 @@ export function HeroChat() {
           </div>
         )}
 
-        <div ref={messagesEndRef} />
       </div>
 
       {/* Input */}
-      <div className="p-4 bg-white border-t border-gray-100">
+      <div className="p-4 bg-white border-t border-gray-100 rounded-b-2xl">
         <div className="relative">
           <input
             ref={inputRef}
