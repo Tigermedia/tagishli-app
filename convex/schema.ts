@@ -71,6 +71,19 @@ export default defineSchema({
     createdAt: v.number(),
   }).index("by_claim", ["claimId"]),
 
+  chatLogs: defineTable({
+    sessionId: v.string(),
+    messages: v.array(v.object({ role: v.string(), content: v.string(), timestamp: v.number() })),
+    userEmail: v.optional(v.string()),
+    claimType: v.optional(v.string()),
+    converted: v.boolean(), // did the user authenticate / start a claim?
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_session", ["sessionId"])
+    .index("by_created", ["createdAt"])
+    .index("by_converted", ["converted"]),
+
   payments: defineTable({
     claimId: v.id("claims"),
     userId: v.id("users"),

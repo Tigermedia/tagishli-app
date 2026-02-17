@@ -10,6 +10,7 @@ interface LocalMessage {
   id: string;
   role: string;
   content: string;
+  timestamp: number;
 }
 
 const VERIFY_AFTER_MESSAGES = 6;
@@ -23,13 +24,16 @@ export function HeroChat() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [conversationId, setConversationId] = useState<Id<"conversations"> | null>(null);
   const [started, setStarted] = useState(false);
+  const [sessionId] = useState(() => `anon-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatBodyRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const chat = useAction(api.ai.chat);
+  const anonymousChat = useAction(api.ai.anonymousChat);
   const createConversation = useMutation(api.conversations.create);
   const saveBatch = useMutation(api.messages.saveBatch);
+  const upsertChatLog = useMutation(api.chatLogs.upsert);
 
   useEffect(() => {
     // Scroll only within the chat container, not the page
@@ -57,33 +61,55 @@ export function HeroChat() {
     setIsTyping(true);
     if (!started) setStarted(true);
 
+    const now = Date.now();
+
     if (isAuthenticated && conversationId) {
       try {
-        const newUserMsg: LocalMessage = { id: `user-${Date.now()}`, role: "user", content: text };
+        const newUserMsg: LocalMessage = { id: `user-${now}`, role: "user", content: text, timestamp: now };
         setLocalMessages((prev) => [...prev, newUserMsg]);
         const response = await chat({ conversationId, userMessage: text });
-        setLocalMessages((prev) => [...prev, { id: `ai-${Date.now()}`, role: "assistant", content: response }]);
+        const aiTime = Date.now();
+        setLocalMessages((prev) => [...prev, { id: `ai-${aiTime}`, role: "assistant", content: response, timestamp: aiTime }]);
       } catch (error) {
         console.error("Chat error:", error);
       }
     } else {
-      const newUserMsg: LocalMessage = { id: `user-${Date.now()}`, role: "user", content: text };
+      const newUserMsg: LocalMessage = { id: `user-${now}`, role: "user", content: text, timestamp: now };
       setLocalMessages((prev) => [...prev, newUserMsg]);
       const newCount = userMessageCount + 1;
       setUserMessageCount(newCount);
 
-      await new Promise((r) => setTimeout(r, 1500));
+      try {
+        const history = localMessages.map((m) => ({ role: m.role, content: m.content }));
+        const aiResponse = await anonymousChat({ history, userMessage: text });
+        const aiTime = Date.now();
 
-      let aiResponse: string;
-      if (newCount === 1) aiResponse = "הבנתי. אני רוצה להבין טוב יותר את המקרה שלך. מי הצד השני? (שם החברה או האדם שאתה רוצה לתבוע)";
-      else if (newCount === 2) aiResponse = "תודה. מתי זה קרה? (תאריך משוער)";
-      else if (newCount === 3) aiResponse = "וכמה אתה רוצה לתבוע? (סכום בשקלים)";
-      else if (newCount >= VERIFY_AFTER_MESSAGES - 2) {
-        aiResponse = "מצוין! אספתי מספיק מידע להתחיל לנסח את התביעה. עכשיו אני צריך לאמת את זהותך כדי לשמור הכל.";
-        setTimeout(() => setShowVerification(true), 500);
-      } else aiResponse = "תודה על המידע. יש לך ראיות או מסמכים שקשורים למקרה? (קבלות, צילומי מסך, התכתבויות)";
+        const updatedMessages = [...localMessages, newUserMsg, { id: `ai-${aiTime}`, role: "assistant", content: aiResponse, timestamp: aiTime }];
+        setLocalMessages((prev) => [
+          ...prev,
+          { id: `ai-${aiTime}`, role: "assistant", content: aiResponse, timestamp: aiTime },
+        ]);
 
-      setLocalMessages((prev) => [...prev, { id: `ai-${Date.now()}`, role: "assistant", content: aiResponse }]);
+        // Save chat log after every exchange
+        try {
+          await upsertChatLog({
+            sessionId,
+            messages: updatedMessages.map((m) => ({ role: m.role, content: m.content, timestamp: m.timestamp })),
+          });
+        } catch (e) {
+          console.error("Failed to save chat log:", e);
+        }
+
+        if (newCount >= VERIFY_AFTER_MESSAGES) {
+          setTimeout(() => setShowVerification(true), 500);
+        }
+      } catch (error) {
+        console.error("Anonymous chat error:", error);
+        setLocalMessages((prev) => [
+          ...prev,
+          { id: `ai-${Date.now()}`, role: "assistant", content: "מצטער, נתקלתי בבעיה טכנית. אנא נסו שוב.", timestamp: Date.now() },
+        ]);
+      }
     }
 
     setIsTyping(false);
@@ -178,11 +204,17 @@ export function HeroChat() {
             onVerified={async (verifiedUserId) => {
               setIsAuthenticated(true);
               setShowVerification(false);
-              // Create conversation and save all pre-auth messages
+              // Mark chat log as converted
+              try {
+                await upsertChatLog({
+                  sessionId,
+                  messages: localMessages.map((m) => ({ role: m.role, content: m.content, timestamp: m.timestamp })),
+                  converted: true,
+                });
+              } catch (e) { console.error("Log update error:", e); }
               try {
                 const convId = await createConversation({ userId: verifiedUserId });
                 setConversationId(convId);
-                // Save existing local messages to Convex
                 if (localMessages.length > 0) {
                   await saveBatch({
                     conversationId: convId,
@@ -192,17 +224,20 @@ export function HeroChat() {
                     })),
                   });
                 }
-                // Add confirmation message
+                // Auto-continue: send a continuation prompt to AI
+                setIsTyping(true);
+                const continueResponse = await chat({
+                  conversationId: convId,
+                  userMessage: "[המשתמש אימת את האימייל שלו בהצלחה. המשך לשאול אותו את השאלה הבאה בתהליך - שאלה אחת בלבד]",
+                });
                 setLocalMessages((prev) => [
                   ...prev,
-                  {
-                    id: `ai-verified-${Date.now()}`,
-                    role: "assistant",
-                    content: "מעולה! האימות הצליח ✅ כל ההודעות נשמרו. בואו נמשיך - אני עכשיו מחובר למערכת המשפטית המלאה.",
-                  },
+                  { id: `ai-continue-${Date.now()}`, role: "assistant", content: continueResponse, timestamp: Date.now() },
                 ]);
+                setIsTyping(false);
               } catch (err) {
                 console.error("Post-auth setup error:", err);
+                setIsTyping(false);
               }
               inputRef.current?.focus();
             }}

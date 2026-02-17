@@ -22,7 +22,7 @@ interface Props {
 }
 
 // Number of messages before triggering verification
-const VERIFY_AFTER_MESSAGES = 6;
+const VERIFY_AFTER_MESSAGES = 8;
 
 export function ChatInterface({
   conversationId,
@@ -44,7 +44,8 @@ export function ChatInterface({
     api.messages.getByConversation,
     conversationId ? { conversationId } : "skip"
   );
-  const chat = conversationId ? useAction(api.ai.chat) : null;
+  const chat = useAction(api.ai.chat);
+  const anonymousChat = useAction(api.ai.anonymousChat);
   const saveBatchMut = useMutation(api.messages.saveBatch);
   const createConvMut = useMutation(api.conversations.create);
 
@@ -66,7 +67,7 @@ export function ChatInterface({
     setInput("");
     setIsTyping(true);
 
-    if (isAuthenticated && conversationId && chat) {
+    if (isAuthenticated && conversationId) {
       // Authenticated mode - use Convex
       try {
         await chat({ conversationId, userMessage: text });
@@ -74,41 +75,37 @@ export function ChatInterface({
         console.error("Chat error:", error);
       }
     } else {
-      // Anonymous mode - local AI simulation
+      // Anonymous mode - use Gemini AI directly
       const newUserMsg: LocalMessage = {
         id: `user-${Date.now()}`,
         role: "user",
         content: text,
       };
-      setLocalMessages((prev) => [...prev, newUserMsg]);
+      const updatedMessages = [...localMessages, newUserMsg];
+      setLocalMessages(updatedMessages);
       const newCount = userMessageCount + 1;
       setUserMessageCount(newCount);
 
-      // Simulate AI response (in anonymous mode we use a simple local response)
-      // In production, this could call a public API endpoint
-      await new Promise((r) => setTimeout(r, 1500));
+      try {
+        const history = localMessages.map((m) => ({ role: m.role, content: m.content }));
+        const aiResponse = await anonymousChat({ history, userMessage: text });
 
-      let aiResponse: string;
-      if (newCount === 1) {
-        aiResponse = "הבנתי. אני רוצה להבין טוב יותר את המקרה שלך. מי הצד השני? (שם החברה או האדם שאתה רוצה לתבוע)";
-      } else if (newCount === 2) {
-        aiResponse = "תודה. מתי זה קרה? (תאריך משוער)";
-      } else if (newCount === 3) {
-        aiResponse = "וכמה אתה רוצה לתבוע? (סכום בשקלים)";
-      } else if (newCount >= VERIFY_AFTER_MESSAGES - 2) {
-        // Trigger verification
-        aiResponse = "מצוין! אספתי מספיק מידע להתחיל לנסח את התביעה. עכשיו אני צריך לאמת את זהותך כדי לשמור הכל.";
-        setTimeout(() => setShowVerification(true), 500);
-      } else {
-        aiResponse = "תודה על המידע. יש לך ראיות או מסמכים שקשורים למקרה? (קבלות, צילומי מסך, התכתבויות)";
+        setLocalMessages((prev) => [
+          ...prev,
+          { id: `ai-${Date.now()}`, role: "assistant", content: aiResponse },
+        ]);
+
+        // Trigger verification after enough messages
+        if (newCount >= VERIFY_AFTER_MESSAGES) {
+          setTimeout(() => setShowVerification(true), 500);
+        }
+      } catch (error) {
+        console.error("Anonymous chat error:", error);
+        setLocalMessages((prev) => [
+          ...prev,
+          { id: `ai-${Date.now()}`, role: "assistant", content: "מצטער, נתקלתי בבעיה טכנית. אנא נסו שוב." },
+        ]);
       }
-
-      const newAiMsg: LocalMessage = {
-        id: `ai-${Date.now()}`,
-        role: "assistant",
-        content: aiResponse,
-      };
-      setLocalMessages((prev) => [...prev, newAiMsg]);
     }
 
     setIsTyping(false);
@@ -124,45 +121,51 @@ export function ChatInterface({
 
   const handleSuggestion = (text: string) => {
     setInput(text);
-    // Auto-send the suggestion
     setTimeout(() => {
-      const fakeInput = text;
       setInput("");
-      setIsTyping(true);
-
-      if (isAuthenticated && conversationId && chat) {
-        chat({ conversationId, userMessage: fakeInput })
-          .catch(console.error)
-          .finally(() => { setIsTyping(false); inputRef.current?.focus(); });
-      } else {
-        // Anonymous mode
-        const newUserMsg: LocalMessage = { id: `user-${Date.now()}`, role: "user", content: fakeInput };
-        setLocalMessages((prev) => [...prev, newUserMsg]);
-        const newCount = userMessageCount + 1;
-        setUserMessageCount(newCount);
-
-        setTimeout(() => {
-          let aiResponse: string;
-          if (newCount === 1) aiResponse = "הבנתי. אני רוצה להבין טוב יותר את המקרה שלך. מי הצד השני? (שם החברה או האדם שאתה רוצה לתבוע)";
-          else if (newCount === 2) aiResponse = "תודה. מתי זה קרה? (תאריך משוער)";
-          else if (newCount === 3) aiResponse = "וכמה אתה רוצה לתבוע? (סכום בשקלים)";
-          else if (newCount >= VERIFY_AFTER_MESSAGES - 2) {
-            aiResponse = "מצוין! אספתי מספיק מידע להתחיל לנסח את התביעה. עכשיו אני צריך לאמת את זהותך כדי לשמור הכל.";
-            setTimeout(() => setShowVerification(true), 500);
-          } else aiResponse = "תודה על המידע. יש לך ראיות או מסמכים שקשורים למקרה? (קבלות, צילומי מסך, התכתבויות)";
-
-          setLocalMessages((prev) => [...prev, { id: `ai-${Date.now()}`, role: "assistant", content: aiResponse }]);
-          setIsTyping(false);
-          inputRef.current?.focus();
-        }, 1500);
-      }
+      handleSendText(text);
     }, 50);
   };
 
+  const handleSendText = async (text: string) => {
+    if (!text.trim() || isTyping) return;
+    setInput("");
+    setIsTyping(true);
+
+    if (isAuthenticated && conversationId) {
+      try {
+        await chat({ conversationId, userMessage: text });
+      } catch (error) {
+        console.error("Chat error:", error);
+      }
+    } else {
+      const newUserMsg: LocalMessage = { id: `user-${Date.now()}`, role: "user", content: text };
+      const updated = [...localMessages, newUserMsg];
+      setLocalMessages(updated);
+      const newCount = userMessageCount + 1;
+      setUserMessageCount(newCount);
+
+      try {
+        const history = localMessages.map((m) => ({ role: m.role, content: m.content }));
+        const aiResponse = await anonymousChat({ history, userMessage: text });
+        setLocalMessages((prev) => [...prev, { id: `ai-${Date.now()}`, role: "assistant", content: aiResponse }]);
+        if (newCount >= VERIFY_AFTER_MESSAGES) {
+          setTimeout(() => setShowVerification(true), 500);
+        }
+      } catch (error) {
+        console.error("Anonymous chat error:", error);
+        setLocalMessages((prev) => [...prev, { id: `ai-${Date.now()}`, role: "assistant", content: "מצטער, נתקלתי בבעיה טכנית. אנא נסו שוב." }]);
+      }
+    }
+
+    setIsTyping(false);
+    inputRef.current?.focus();
+  };
+
   return (
-    <div className="flex flex-col h-[100dvh] bg-[var(--color-navy-dark)] overflow-x-hidden">
+    <div className="flex flex-col h-[100dvh] bg-white md:bg-[var(--color-navy-dark)] overflow-x-hidden">
       {/* Header */}
-      <header className="flex-shrink-0 bg-[var(--color-navy-dark)]/80 backdrop-blur-md border-b border-white/5 px-4 py-3">
+      <header className="flex-shrink-0 bg-[var(--color-navy-dark)]/80 backdrop-blur-md border-b border-gray-200 md:border-white/5 px-4 py-3">
         <div className="max-w-3xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="relative">
@@ -190,7 +193,7 @@ export function ChatInterface({
       </header>
 
       {/* Messages */}
-      <div ref={chatBodyRef} className="flex-1 overflow-y-auto px-4 py-6 scrollbar-hide">
+      <div ref={chatBodyRef} className="flex-1 overflow-y-auto px-4 py-6 scrollbar-hide bg-gray-50 md:bg-transparent">
         <div className="max-w-3xl mx-auto space-y-4">
           {/* Welcome */}
           {displayMessages.length === 0 && !showVerification && (
@@ -198,8 +201,8 @@ export function ChatInterface({
               <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-tr from-[var(--color-primary)] to-blue-400 flex items-center justify-center">
                 <span className="material-icons-outlined text-white text-4xl">smart_toy</span>
               </div>
-              <h2 className="text-xl font-bold text-white mb-2 px-2">שלום! אני העוזר הדיגיטלי שלך</h2>
-              <p className="text-gray-400 mb-8 max-w-md mx-auto px-4">
+              <h2 className="text-xl font-bold text-gray-900 md:text-white mb-2 px-2">שלום! אני העוזר הדיגיטלי שלך</h2>
+              <p className="text-gray-500 md:text-gray-400 mb-8 max-w-md mx-auto px-4">
                 ספרו לי בקצרה מה קרה, ואני אעזור לכם להכין תביעה מקצועית. אין צורך להתחבר - נתחיל ישר.
               </p>
               <div className="flex flex-wrap gap-3 justify-center px-2">
@@ -218,7 +221,7 @@ export function ChatInterface({
                   <button
                     key={suggestion}
                     onClick={() => handleSuggestion(suggestion)}
-                    className="px-4 py-2 text-sm bg-white/5 border border-white/10 rounded-full text-gray-300 hover:bg-white/10 hover:text-white transition-colors"
+                    className="px-3 py-2 text-xs md:text-sm md:px-4 bg-white md:bg-white/5 border border-gray-200 md:border-white/10 rounded-lg md:rounded-full text-gray-700 md:text-gray-300 hover:border-[var(--color-gold)] md:hover:bg-white/10 md:hover:text-white transition-colors shadow-sm md:shadow-none"
                   >
                     {suggestion}
                   </button>
@@ -235,7 +238,6 @@ export function ChatInterface({
           {showVerification && !isAuthenticated && (
             <EmailVerification
               onVerified={async (verifiedUserId) => {
-                // Create conversation and save pre-auth messages - no reload!
                 try {
                   const convId = await createConvMut({ userId: verifiedUserId });
                   if (localMessages.length > 0) {
@@ -247,16 +249,22 @@ export function ChatInterface({
                       })),
                     });
                   }
-                  setLocalMessages((prev) => [
-                    ...prev,
-                    {
-                      id: `ai-verified-${Date.now()}`,
-                      role: "assistant",
-                      content: "מעולה! האימות הצליח ✅ כל ההודעות נשמרו. בואו נמשיך - אני עכשיו מחובר למערכת המשפטית המלאה.",
-                    },
-                  ]);
+                  // Auto-continue: ask AI to continue with next question
+                  setIsTyping(true);
+                  if (true) {
+                    const continueResponse = await chat({
+                      conversationId: convId,
+                      userMessage: "[המשתמש אימת את האימייל שלו בהצלחה. המשך לשאול אותו את השאלה הבאה בתהליך - שאלה אחת בלבד]",
+                    });
+                    setLocalMessages((prev) => [
+                      ...prev,
+                      { id: `ai-continue-${Date.now()}`, role: "assistant", content: continueResponse },
+                    ]);
+                  }
+                  setIsTyping(false);
                 } catch (err) {
                   console.error("Post-auth error:", err);
+                  setIsTyping(false);
                 }
                 setShowVerification(false);
                 onAuthenticated();
@@ -270,7 +278,7 @@ export function ChatInterface({
       </div>
 
       {/* Input */}
-      <div className="flex-shrink-0 bg-[var(--color-navy-dark)]/60 backdrop-blur-md border-t border-white/5 px-4 py-3">
+      <div className="flex-shrink-0 bg-white md:bg-[var(--color-navy-dark)]/60 backdrop-blur-md border-t border-gray-100 md:border-white/5 px-4 py-3">
         <div className="max-w-3xl mx-auto">
           <div className="relative">
             <input
@@ -281,7 +289,7 @@ export function ChatInterface({
               onKeyDown={handleKeyDown}
               placeholder={showVerification && !isAuthenticated ? "אמתו את הטלפון כדי להמשיך..." : "הקלידו תשובה..."}
               disabled={isTyping || (showVerification && !isAuthenticated)}
-              className="w-full bg-white/10 border border-white/10 rounded-xl px-4 py-3 pl-14 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/50 transition disabled:opacity-50"
+              className="w-full bg-gray-50 md:bg-white/10 border border-gray-200 md:border-white/10 rounded-xl px-4 py-3 pl-14 text-sm text-gray-900 md:text-white placeholder-gray-400 md:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[var(--color-gold)]/50 md:focus:ring-[var(--color-primary)]/50 transition disabled:opacity-50"
               dir="rtl"
             />
             <button
@@ -292,7 +300,7 @@ export function ChatInterface({
               <span className="material-icons-outlined text-lg">arrow_back</span>
             </button>
           </div>
-          <p className="text-center text-xs text-gray-600 mt-2">
+          <p className="text-center text-xs text-gray-400 md:text-gray-600 mt-2">
             *המערכת מסייעת בניסוח בלבד ואינה מהווה ייעוץ משפטי
           </p>
         </div>

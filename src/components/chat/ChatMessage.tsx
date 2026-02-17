@@ -31,8 +31,8 @@ export function ChatMessage({ role, content }: Props) {
       <div
         className={`max-w-[80%] md:max-w-[70%] px-4 py-3 ${
           isUser
-            ? "bg-[var(--color-primary)]/90 text-white rounded-2xl rounded-tr-none shadow-lg"
-            : "bg-white/5 border border-white/10 text-gray-200 rounded-2xl rounded-tl-none"
+            ? "bg-[var(--color-navy-dark)] text-white rounded-2xl rounded-tr-none shadow-md md:bg-[var(--color-primary)]/90 md:shadow-lg"
+            : "bg-white border border-gray-100 text-gray-800 rounded-2xl rounded-tl-none shadow-sm md:bg-white/5 md:border-white/10 md:text-gray-200 md:shadow-none"
         }`}
       >
         <p className="text-sm leading-relaxed whitespace-pre-wrap">{content}</p>
