@@ -5,6 +5,17 @@ import { useAction, useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import type { Id } from "../../../convex/_generated/dataModel";
 import { EmailVerification } from "./EmailVerification";
+import { CompanySearch } from "./CompanySearch";
+
+interface CompanyData {
+  name: string;
+  number: string;
+  type: string;
+  status: string;
+  city: string;
+  street: string;
+  houseNumber: string;
+}
 
 interface LocalMessage {
   id: string;
@@ -24,6 +35,8 @@ export function HeroChat() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [conversationId, setConversationId] = useState<Id<"conversations"> | null>(null);
   const [started, setStarted] = useState(false);
+  const [showCompanySearch, setShowCompanySearch] = useState(false);
+  const [selectedCompany, setSelectedCompany] = useState<CompanyData | null>(null);
   const [sessionId] = useState(() => `anon-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatBodyRef = useRef<HTMLDivElement>(null);
@@ -70,6 +83,10 @@ export function HeroChat() {
         const response = await chat({ conversationId, userMessage: text });
         const aiTime = Date.now();
         setLocalMessages((prev) => [...prev, { id: `ai-${aiTime}`, role: "assistant", content: response, timestamp: aiTime }]);
+        // Show company search if AI asks about the defendant company
+        if (shouldShowCompanySearch(response)) {
+          setTimeout(() => setShowCompanySearch(true), 300);
+        }
       } catch (error) {
         console.error("Chat error:", error);
       }
@@ -89,6 +106,11 @@ export function HeroChat() {
           ...prev,
           { id: `ai-${aiTime}`, role: "assistant", content: aiResponse, timestamp: aiTime },
         ]);
+
+        // Show company search if AI asks about the defendant
+        if (shouldShowCompanySearch(aiResponse)) {
+          setTimeout(() => setShowCompanySearch(true), 300);
+        }
 
         // Save chat log after every exchange
         try {
@@ -114,6 +136,24 @@ export function HeroChat() {
 
     setIsTyping(false);
     inputRef.current?.focus();
+  };
+
+  const shouldShowCompanySearch = (text: string): boolean => {
+    const triggers = ["נגד מי", "שם החברה", "שם העסק", "נגד איזו חברה", "שם הנתבע", "מי הצד השני", "נגד מי התביעה"];
+    return triggers.some((t) => text.includes(t)) && !selectedCompany;
+  };
+
+  const handleCompanySelect = (company: CompanyData) => {
+    setSelectedCompany(company);
+    setShowCompanySearch(false);
+    const address = [company.street, company.houseNumber, company.city].filter(Boolean).join(" ");
+    const msg = `${company.name} (ח.פ. ${company.number})${address ? `, כתובת: ${address}` : ""}`;
+    sendMessage(msg);
+  };
+
+  const handleCompanyManual = (name: string) => {
+    setShowCompanySearch(false);
+    sendMessage(name);
   };
 
   const handleSend = () => sendMessage(input.trim());
@@ -197,6 +237,14 @@ export function HeroChat() {
             </div>
           </div>
         ))}
+
+        {/* Company search */}
+        {showCompanySearch && (
+          <CompanySearch
+            onSelect={handleCompanySelect}
+            onManualEntry={handleCompanyManual}
+          />
+        )}
 
         {/* Email verification */}
         {showVerification && !isAuthenticated && (

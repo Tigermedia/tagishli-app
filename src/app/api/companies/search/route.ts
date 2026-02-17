@@ -1,0 +1,73 @@
+import { NextResponse } from "next/server";
+
+// data.gov.il open data - Companies Registry (רשם החברות)
+const RESOURCE_ID = "f004176c-b85f-4542-8901-7b3176f9a054";
+const DATA_GOV_URL = "https://data.gov.il/api/3/action/datastore_search";
+
+// In-memory cache (per serverless instance)
+const cache = new Map<string, { data: unknown; ts: number }>();
+const CACHE_TTL = 1000 * 60 * 60; // 1 hour
+
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
+  const q = searchParams.get("q")?.trim();
+
+  if (!q || q.length < 2) {
+    return NextResponse.json({ results: [] });
+  }
+
+  // Check cache
+  const cacheKey = q.toLowerCase();
+  const cached = cache.get(cacheKey);
+  if (cached && Date.now() - cached.ts < CACHE_TTL) {
+    return NextResponse.json(cached.data, {
+      headers: { "X-Cache": "HIT" },
+    });
+  }
+
+  try {
+    const res = await fetch(
+      `${DATA_GOV_URL}?resource_id=${RESOURCE_ID}&q=${encodeURIComponent(q)}&limit=10`,
+      {
+        headers: { Accept: "application/json" },
+        next: { revalidate: 3600 },
+      }
+    );
+
+    if (!res.ok) {
+      throw new Error(`data.gov.il returned ${res.status}`);
+    }
+
+    const data = await res.json();
+    const records = data?.result?.records || [];
+
+    const results = records.map((r: Record<string, unknown>) => ({
+      name: r["שם חברה"] as string,
+      number: String(r["מספר חברה"] || ""),
+      type: r["סוג תאגיד"] as string,
+      status: r["סטטוס חברה"] as string,
+      city: r["שם עיר"] as string,
+      street: r["שם רחוב"] as string,
+      houseNumber: r["מספר בית"] as string,
+    }));
+
+    const response = { results, total: data?.result?.total || 0 };
+
+    // Cache it
+    cache.set(cacheKey, { data: response, ts: Date.now() });
+
+    // Prune old cache entries (keep under 500)
+    if (cache.size > 500) {
+      const oldest = [...cache.entries()].sort((a, b) => a[1].ts - b[1].ts);
+      for (let i = 0; i < 100; i++) cache.delete(oldest[i][0]);
+    }
+
+    return NextResponse.json(response);
+  } catch (error) {
+    console.error("Company search error:", error);
+    return NextResponse.json(
+      { results: [], error: "חיפוש חברות זמנית לא זמין" },
+      { status: 502 }
+    );
+  }
+}
