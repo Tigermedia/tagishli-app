@@ -4,8 +4,6 @@ import { useState, useEffect } from "react";
 import { useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 
-const ADMIN_PASSWORD = "tagishli2026";
-
 export default function AdminChatsPage() {
   const [authed, setAuthed] = useState(false);
   const [password, setPassword] = useState("");
@@ -17,11 +15,18 @@ export default function AdminChatsPage() {
     }
   }, []);
 
-  const handleLogin = () => {
-    if (password === ADMIN_PASSWORD) {
-      setAuthed(true);
-      sessionStorage.setItem("admin_auth", "true");
-    }
+  const handleLogin = async () => {
+    try {
+      const res = await fetch("/api/admin/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+      });
+      if (res.ok) {
+        setAuthed(true);
+        sessionStorage.setItem("admin_auth", "true");
+      }
+    } catch { /* ignore */ }
   };
 
   if (!authed) {
