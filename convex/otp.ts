@@ -105,7 +105,7 @@ export const sendOTP = action({
         Authorization: `Bearer ${resendKey}`,
       },
       body: JSON.stringify({
-        from: "תגיש לי <noreply@resend.dev>",
+        from: "תגיש לי <noreply@tagishli.co.il>",
         to: [args.email],
         subject: `קוד אימות: ${code}`,
         html: `
