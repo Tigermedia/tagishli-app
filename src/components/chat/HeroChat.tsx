@@ -24,7 +24,7 @@ interface LocalMessage {
   timestamp: number;
 }
 
-const VERIFY_AFTER_MESSAGES = 6;
+const VERIFY_AFTER_MESSAGES = 4;
 
 export function HeroChat() {
   const [input, setInput] = useState("");
@@ -139,15 +139,27 @@ export function HeroChat() {
   };
 
   const shouldShowCompanySearch = (text: string): boolean => {
-    const triggers = ["נגד מי", "שם החברה", "שם העסק", "נגד איזו חברה", "שם הנתבע", "מי הצד השני", "נגד מי התביעה"];
-    return triggers.some((t) => text.includes(t)) && !selectedCompany;
+    if (selectedCompany) return false;
+    const triggers = [
+      "נגד מי", "שם החברה", "שם העסק", "נגד איזו חברה", "שם הנתבע",
+      "מי הצד השני", "נגד מי התביעה", "מה שם", "את מי", "ממי הזמנת",
+      "איזו חברה", "מאיזו חברה", "באיזה חנות", "מאיזה עסק", "מי הספק",
+      "נגד מי רוצה", "שם הנתבע"
+    ];
+    return triggers.some((t) => text.includes(t));
   };
 
   const handleCompanySelect = (company: CompanyData) => {
     setSelectedCompany(company);
     setShowCompanySearch(false);
+    // Build comprehensive message with all details from the registry
+    const parts = [company.name];
+    if (company.number) parts.push(`ח.פ. ${company.number}`);
+    if (company.status) parts.push(`סטטוס: ${company.status}`);
     const address = [company.street, company.houseNumber, company.city].filter(Boolean).join(" ");
-    const msg = `${company.name} (ח.פ. ${company.number})${address ? `, כתובת: ${address}` : ""}`;
+    if (address) parts.push(`כתובת: ${address}`);
+    // Send as structured data so AI knows it has all defendant details
+    const msg = `[נבחרה חברה מרשם החברות]\nשם: ${company.name}\nח.פ.: ${company.number}\nכתובת: ${address || "לא צוינה ברשם"}\nסטטוס: ${company.status || "לא ידוע"}\nסוג: ${company.type || "חברה"}`;
     sendMessage(msg);
   };
 

@@ -41,15 +41,19 @@ export async function GET(req: Request) {
     const data = await res.json();
     const records = data?.result?.records || [];
 
-    const results = records.map((r: Record<string, unknown>) => ({
-      name: r["שם חברה"] as string,
-      number: String(r["מספר חברה"] || ""),
-      type: r["סוג תאגיד"] as string,
-      status: r["סטטוס חברה"] as string,
-      city: r["שם עיר"] as string,
-      street: r["שם רחוב"] as string,
-      houseNumber: r["מספר בית"] as string,
-    }));
+    const results = records.map((r: Record<string, string>) => {
+      // data.gov.il field names (Hebrew keys)
+      const name = r["שם חברה"] || "";
+      const number = String(r["מספר חברה"] || "");
+      const type = r["סוג תאגיד"] || "";
+      const status = r["סטטוס חברה"] || "";
+      const city = r["שם עיר"] || "";
+      const street = r["שם רחוב"] || "";
+      const houseNumber = String(r["מספר בית"] || "");
+      // Clean up ~ in names (data.gov.il uses ~ instead of ")
+      const cleanName = name.replace(/~/g, '"');
+      return { name: cleanName, number, type, status, city, street, houseNumber };
+    });
 
     const response = { results, total: data?.result?.total || 0 };
 
