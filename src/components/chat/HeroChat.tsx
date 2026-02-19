@@ -140,15 +140,13 @@ export function HeroChat() {
 
   const shouldShowCompanySearch = (text: string): boolean => {
     if (selectedCompany) return false;
+    // Only show when AI specifically asks for the company NAME (not "from whom did you order")
     const triggers = [
-      "נגד מי", "שם החברה", "שם העסק", "נגד איזו חברה", "שם הנתבע",
-      "מי הצד השני", "נגד מי התביעה", "מה שם", "את מי", "ממי הזמנת",
-      "איזו חברה", "מאיזו חברה", "באיזה חנות", "מאיזה עסק", "מי הספק",
-      "נגד מי רוצה", "שם הנתבע", "ממי", "מאיזה", "באיזה", "מאיפה",
-      "הזמנת", "קנית", "רכשת", "שילמת", "מאיזו חנות", "מאיזה אתר"
+      "שם החברה", "שם העסק", "מה שם החברה", "מה שם העסק",
+      "איזו חברה", "מאיזו חברה", "באיזה חנות", "מאיזה עסק",
+      "שם הנתבע", "מאיזה אתר", "שם המקום"
     ];
-    const lowerText = text.toLowerCase();
-    return triggers.some((t) => lowerText.includes(t));
+    return triggers.some((t) => text.includes(t));
   };
 
   const handleCompanySelect = (company: CompanyData) => {
