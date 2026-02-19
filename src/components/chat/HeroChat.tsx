@@ -144,9 +144,11 @@ export function HeroChat() {
       "נגד מי", "שם החברה", "שם העסק", "נגד איזו חברה", "שם הנתבע",
       "מי הצד השני", "נגד מי התביעה", "מה שם", "את מי", "ממי הזמנת",
       "איזו חברה", "מאיזו חברה", "באיזה חנות", "מאיזה עסק", "מי הספק",
-      "נגד מי רוצה", "שם הנתבע"
+      "נגד מי רוצה", "שם הנתבע", "ממי", "מאיזה", "באיזה", "מאיפה",
+      "הזמנת", "קנית", "רכשת", "שילמת", "מאיזו חנות", "מאיזה אתר"
     ];
-    return triggers.some((t) => text.includes(t));
+    const lowerText = text.toLowerCase();
+    return triggers.some((t) => lowerText.includes(t));
   };
 
   const handleCompanySelect = (company: CompanyData) => {

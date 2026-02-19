@@ -7,6 +7,17 @@ import type { Id } from "../../../convex/_generated/dataModel";
 import { ChatMessage } from "./ChatMessage";
 import { TypingIndicator } from "./TypingIndicator";
 import { EmailVerification } from "./EmailVerification";
+import { CompanySearch } from "./CompanySearch";
+
+interface CompanyData {
+  name: string;
+  number: string;
+  type: string;
+  status: string;
+  city: string;
+  street: string;
+  houseNumber: string;
+}
 
 interface LocalMessage {
   id: string;
@@ -22,7 +33,7 @@ interface Props {
 }
 
 // Number of messages before triggering verification
-const VERIFY_AFTER_MESSAGES = 8;
+const VERIFY_AFTER_MESSAGES = 4;
 
 export function ChatInterface({
   conversationId,
@@ -35,6 +46,8 @@ export function ChatInterface({
   const [showVerification, setShowVerification] = useState(false);
   const [localMessages, setLocalMessages] = useState<LocalMessage[]>([]);
   const [userMessageCount, setUserMessageCount] = useState(0);
+  const [showCompanySearch, setShowCompanySearch] = useState(false);
+  const [selectedCompany, setSelectedCompany] = useState<CompanyData | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatBodyRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -95,6 +108,11 @@ export function ChatInterface({
           { id: `ai-${Date.now()}`, role: "assistant", content: aiResponse },
         ]);
 
+        // Show company search if AI asks about the defendant
+        if (shouldShowCompanySearch(aiResponse)) {
+          setTimeout(() => setShowCompanySearch(true), 300);
+        }
+
         // Trigger verification after enough messages
         if (newCount >= VERIFY_AFTER_MESSAGES) {
           setTimeout(() => setShowVerification(true), 500);
@@ -149,6 +167,9 @@ export function ChatInterface({
         const history = localMessages.map((m) => ({ role: m.role, content: m.content }));
         const aiResponse = await anonymousChat({ history, userMessage: text });
         setLocalMessages((prev) => [...prev, { id: `ai-${Date.now()}`, role: "assistant", content: aiResponse }]);
+        if (shouldShowCompanySearch(aiResponse)) {
+          setTimeout(() => setShowCompanySearch(true), 300);
+        }
         if (newCount >= VERIFY_AFTER_MESSAGES) {
           setTimeout(() => setShowVerification(true), 500);
         }
@@ -160,6 +181,33 @@ export function ChatInterface({
 
     setIsTyping(false);
     inputRef.current?.focus();
+  };
+
+  const shouldShowCompanySearch = (text: string): boolean => {
+    if (selectedCompany) return false;
+    const triggers = [
+      "נגד מי", "שם החברה", "שם העסק", "נגד איזו חברה", "שם הנתבע",
+      "מי הצד השני", "נגד מי התביעה", "מה שם", "את מי", "ממי הזמנת",
+      "איזו חברה", "מאיזו חברה", "באיזה חנות", "מאיזה עסק", "מי הספק",
+      "נגד מי רוצה", "ממי", "מאיזה", "באיזה", "מאיפה",
+      "הזמנת", "קנית", "רכשת", "שילמת", "מאיזו חנות", "מאיזה אתר"
+    ];
+    return triggers.some((t) => text.includes(t));
+  };
+
+  const handleCompanySelect = (company: CompanyData) => {
+    setSelectedCompany(company);
+    setShowCompanySearch(false);
+    const address = [company.street, company.houseNumber, company.city].filter(Boolean).join(" ");
+    const msg = `[נבחרה חברה מרשם החברות]\nשם: ${company.name}\nח.פ.: ${company.number}\nכתובת: ${address || "לא צוינה ברשם"}\nסטטוס: ${company.status || "לא ידוע"}\nסוג: ${company.type || "חברה"}`;
+    setInput("");
+    handleSendText(msg);
+  };
+
+  const handleCompanyManual = (name: string) => {
+    setShowCompanySearch(false);
+    setInput("");
+    handleSendText(name);
   };
 
   return (
@@ -234,6 +282,14 @@ export function ChatInterface({
             <ChatMessage key={msg.id} role={msg.role} content={msg.content} />
           ))}
 
+          {/* Company Search */}
+          {showCompanySearch && (
+            <CompanySearch
+              onSelect={handleCompanySelect}
+              onManualEntry={handleCompanyManual}
+            />
+          )}
+
           {/* Inline Email Verification */}
           {showVerification && !isAuthenticated && (
             <EmailVerification
@@ -287,7 +343,7 @@ export function ChatInterface({
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder={showVerification && !isAuthenticated ? "אמתו את הטלפון כדי להמשיך..." : "הקלידו תשובה..."}
+              placeholder={showVerification && !isAuthenticated ? "אמתו את האימייל כדי להמשיך..." : "הקלידו תשובה..."}
               disabled={isTyping || (showVerification && !isAuthenticated)}
               className="w-full bg-gray-50 md:bg-white/10 border border-gray-200 md:border-white/10 rounded-xl px-4 py-3 pl-14 text-sm text-gray-900 md:text-white placeholder-gray-400 md:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[var(--color-gold)]/50 md:focus:ring-[var(--color-primary)]/50 transition disabled:opacity-50"
               dir="rtl"
